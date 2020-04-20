@@ -22,8 +22,10 @@ import walkingkooka.HashCodeEqualsDefinedTesting2;
 import walkingkooka.ToStringTesting;
 import walkingkooka.collect.list.Lists;
 import walkingkooka.collect.map.Maps;
+import walkingkooka.collect.set.Sets;
 import walkingkooka.reflect.ClassTesting;
 import walkingkooka.reflect.JavaVisibility;
+import walkingkooka.text.CaseSensitivity;
 import walkingkooka.text.CharSequences;
 import walkingkooka.text.Indentation;
 import walkingkooka.text.printer.Printers;
@@ -39,6 +41,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public final class WalkingkookaLanguageTagTest implements ClassTesting<WalkingkookaLanguageTag>,
@@ -132,8 +135,78 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
                 .collect(Collectors.joining("\n"));
     }
 
+    // all..............................................................................................................
+
     @Test
-    public void testWithoutAlternatives() {
+    public void testAllWithNullFilterFails() {
+        assertThrows(NullPointerException.class, () -> WalkingkookaLanguageTag.all(null));
+    }
+
+    @Test
+    public void testAllWithEmptyFilterFails() {
+        assertThrows(IllegalArgumentException.class, () -> WalkingkookaLanguageTag.all(""));
+    }
+
+    @Test
+    public void testAllInvalidFilterFails() {
+        assertThrows(IllegalArgumentException.class, () -> WalkingkookaLanguageTag.all("EN,*FR"));
+    }
+
+    @Test
+    public void testAllInvalidFilterFails2() {
+        assertThrows(IllegalArgumentException.class, () -> WalkingkookaLanguageTag.all("EN,FR*-*"));
+    }
+
+    @Test
+    public void testAllWildcard() {
+        this.allAndCheck("*", WalkingkookaLanguageTag.all());
+    }
+
+    @Test
+    public void testAllEn() {
+        this.allAndCheck("EN", "en");
+    }
+
+    @Test
+    public void testAllEnWildcard2() {
+        this.allAndCheck("en", "en");
+    }
+
+    @Test
+    public void testAllMultpleExact() {
+        this.allAndCheck("EN,FR", "en", "fr");
+    }
+
+    @Test
+    public void testAllEnWildcard() {
+        this.allAndCheck("EN*",
+                WalkingkookaLanguageTag.all()
+                        .stream()
+                        .filter(t -> CaseSensitivity.INSENSITIVE.startsWith(t, "EN"))
+                        .collect(Collectors.toCollection(() -> Sets.sorted(String.CASE_INSENSITIVE_ORDER))));
+    }
+
+    @Test
+    public void testAllEnWildcardFr() {
+        this.allAndCheck("EN*,FR",
+                WalkingkookaLanguageTag.all()
+                        .stream()
+                        .filter(t -> CaseSensitivity.INSENSITIVE.startsWith(t, "EN") || t.equalsIgnoreCase("FR"))
+                        .collect(Collectors.toCollection(() -> Sets.sorted(String.CASE_INSENSITIVE_ORDER))));
+    }
+
+    private void allAndCheck(final String filter,
+                             final String... expected) {
+        this.allAndCheck(filter, Sets.of(expected));
+    }
+
+    private void allAndCheck(final String filter,
+                             final Set<String> expected) {
+        assertEquals(expected, WalkingkookaLanguageTag.all(filter), () -> " filter " + CharSequences.quoteAndEscape(filter));
+    }
+
+    @Test
+    public void testAllWithoutAlternatives() {
         // filter out the "duplicate" locales with two forms before comparing.
         assertEquals(Arrays.stream(Locale.getAvailableLocales())
                         .sorted(new Comparator<Locale>() {
@@ -157,7 +230,7 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
     }
 
     @Test
-    public void testToolOutput() {
+    public void testAll() {
         assertEquals(Stream.concat(Stream.of("", "in", "in-ID", "iw", "iw-IL", "ji", "ji-001"),
                 Arrays.stream(Locale.getAvailableLocales())
                         .map(Locale::toLanguageTag)
