@@ -20,6 +20,8 @@ package walkingkooka.j2cl.locale;
 import javaemul.internal.annotations.GwtIncompatible;
 import walkingkooka.NeverError;
 import walkingkooka.collect.set.Sets;
+import walkingkooka.predicate.Predicates;
+import walkingkooka.text.CaseSensitivity;
 import walkingkooka.text.CharSequences;
 import walkingkooka.text.CharacterConstant;
 
@@ -29,6 +31,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -44,6 +47,49 @@ public final class WalkingkookaLanguageTag {
      */
     @GwtIncompatible
     public static Set<String> all() {
+        return all("*");
+    }
+
+    /**
+     * The filter may have multiple patterns separated by csvs, each pattern can end in a wildcard or star.
+     * An annotation processor could fetch the filter from a system property and use that to filter requested locales language tags
+     * for final processing.
+     */
+    @GwtIncompatible
+    public static Set<String> all(final String filter) {
+        CharSequences.failIfNullOrEmpty(filter, "filter");
+
+        final String[] tokens = filter.split(",");
+        if (tokens.length == 0) {
+            throw new IllegalArgumentException("Filter empty");
+        }
+
+        Predicate<String> predicate = Predicates.never();
+
+        for (final String token : tokens) {
+            if (token.equals("*")) {
+                predicate = Predicates.always();
+                break;
+            }
+
+            final int wildcard = token.indexOf("*");
+            final int length = token.length();
+            if (-1 != wildcard) {
+                if (wildcard != length - 1) {
+                    throw new IllegalArgumentException("Bad filter " + CharSequences.quoteAndEscape(token) + " only trailing wildcards supported.");
+                }
+
+                predicate = predicate.or(Predicates.charSequenceStartsWith(CaseSensitivity.INSENSITIVE, token.substring(0, token.length() - 1)));
+                continue;
+            }
+
+            predicate = predicate.or(token::equalsIgnoreCase);
+        }
+
+        return all0(predicate);
+    }
+
+    private static Set<String> all0(final Predicate<String> filter) {
         final Set<String> all = Sets.sorted();
 
         for(final java.util.Locale locale : java.util.Locale.getAvailableLocales()) {
@@ -52,6 +98,10 @@ public final class WalkingkookaLanguageTag {
             }
 
             final String languageTag = locale.toLanguageTag();
+            if(false == filter.test(languageTag)) {
+                continue;
+            }
+
             all.add(languageTag);
 
             final String language = locale.getLanguage();
