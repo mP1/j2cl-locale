@@ -1,0 +1,5 @@
+#
+# Ignore the annotation provider and all helpers.
+#
+*.*
+
