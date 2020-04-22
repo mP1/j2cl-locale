@@ -13,9 +13,45 @@ This should be considered part of the internal support classes for the emulated 
 It contains some utilties that can be used to assist the authoring of annotation processors that generate code or data that is Locale aware,
 such as the emulation of `java.text` and others.
 
+The classes included in this project should be considered internal, and this project should only be referenced as a dependency
+by [j2cl-java-util-Locale](https://travis-ci.com/mP1/j2cl-java-util-Locale)].
+
+
+
+## Locale selection (javac annotation processor argument)
+
+The locales must be selected by setting a [annotation argument](https://docs.oracle.com/javase/7/docs/technotes/tools/windows/javac.html)
+`walkingkooka.java-util-Locale` with a comma separated list of desired locales with trailing wildcard support.
+
+Some examples values include.
+
+- `*` All locales
+- `EN` Only includes the `EN` locale without including `EN-US` or `EN-GB`.
+- `EN-*` Includes all locales beginning with `EN`.
+- `EN-*,FR-*` Include all English and French locales.
+
+### Maven annotation processor argument
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>3.8.0</version>
+    <configuration>
+        <source>9</source>
+        <target>9</target>
+        <compilerArgs>
+            <arg>-Awalkingkooka.j2cl.java.util.Locale=EN-*</arg>
+        </compilerArgs>
+    </configuration>
+</plugin>
+```
+
+
+
+## Example uses
+
 TODO Create a list of annotation processors and parent public project.
-
-
 
 # Usage
 
