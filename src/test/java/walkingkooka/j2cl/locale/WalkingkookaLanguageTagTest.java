@@ -27,8 +27,6 @@ import walkingkooka.reflect.ClassTesting;
 import walkingkooka.reflect.JavaVisibility;
 import walkingkooka.text.CaseSensitivity;
 import walkingkooka.text.CharSequences;
-import walkingkooka.text.Indentation;
-import walkingkooka.text.printer.Printers;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -38,7 +36,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -225,22 +222,6 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
                             final int index = t.indexOf("-");
                             final String language = -1 != index ? t.substring(0, index) : t;
                             return WalkingkookaLanguageTag.oldToNewLanguage(language).equals(language);
-                        })
-                        .collect(Collectors.joining("\n")));
-    }
-
-    @Test
-    public void testAll() {
-        assertEquals(Stream.concat(Stream.of("", "in", "in-ID", "iw", "iw-IL", "ji", "ji-001"),
-                Arrays.stream(Locale.getAvailableLocales())
-                        .map(Locale::toLanguageTag)
-                        .filter(t -> false == WalkingkookaLanguageTag.isUnsupported(t)))
-                        .sorted()
-                        .collect(Collectors.joining("\n")),
-                Arrays.stream(WalkingkookaLanguageTagProviderTool.encode(Printers.sink().indenting(Indentation.with(""))).split(WalkingkookaLanguageTag.LOCALE_SEPARATOR))
-                        .map(s -> {
-                            final int slash = s.indexOf(WalkingkookaLanguageTag.LOCALE_COMPONENT_SEPARATOR);
-                            return -1 == slash ? s : s.substring(0, slash);
                         })
                         .collect(Collectors.joining("\n")));
     }
