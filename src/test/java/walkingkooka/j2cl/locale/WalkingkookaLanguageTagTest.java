@@ -179,7 +179,7 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
         this.allAndCheck("EN*",
                 WalkingkookaLanguageTag.all()
                         .stream()
-                        .filter(t -> CaseSensitivity.INSENSITIVE.startsWith(t, "EN"))
+                        .filter(t -> CaseSensitivity.INSENSITIVE.equals(t, "EN") || CaseSensitivity.INSENSITIVE.startsWith(t, "EN"))
                         .collect(Collectors.toCollection(() -> Sets.sorted(String.CASE_INSENSITIVE_ORDER))));
     }
 
