@@ -79,7 +79,10 @@ public final class WalkingkookaLanguageTag {
                     throw new IllegalArgumentException("Bad filter " + CharSequences.quoteAndEscape(token) + " only trailing wildcards supported.");
                 }
 
-                predicate = predicate.or(Predicates.charSequenceStartsWith(CaseSensitivity.INSENSITIVE, token.substring(0, token.length() - 1)));
+                // EN* matches EN and EN* anything after.
+                final String beforeWildcard = token.substring(0, token.length() - 1);
+                predicate = predicate.or(Predicates.charSequenceStartsWith(CaseSensitivity.INSENSITIVE, beforeWildcard))
+                        .or(Predicate.isEqual(beforeWildcard));
                 continue;
             }
 
