@@ -89,7 +89,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     private void process0() {
         try {
             final String localeFilter = this.localeFilter();
-            final String replacement = this.generateTemplateMergeReplacement(WalkingkookaLanguageTag.all(localeFilter));
+            final String replacement = this.generateTemplateMergeReplacement(WalkingkookaLanguageTag.all(localeFilter), this.localeFilter);
             final String template = this.providerTemplate();
             final String placeholder = this.placeholder();
             final String merged = template.replace(placeholder, replacement);
@@ -130,7 +130,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     /**
      * This method is invoked with one or more language tags and should return a method that will appear in the template.
      */
-    protected abstract String generateTemplateMergeReplacement(final Set<String> languageTags);
+    protected abstract String generateTemplateMergeReplacement(final Set<String> languageTags, final String filter);
 
     // template.........................................................................................................
 
@@ -173,7 +173,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     // template merge...................................................................................................
 
     /**
-     * The placeholder that appears in the template that will be replaced by the response of {@link #generateTemplateMergeReplacement(Set)}.
+     * The placeholder that appears in the template that will be replaced by the response of {@link #generateTemplateMergeReplacement(Set, String)}.
      */
     protected abstract String placeholder();
 
