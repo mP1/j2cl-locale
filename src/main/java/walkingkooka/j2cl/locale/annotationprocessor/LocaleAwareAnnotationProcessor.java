@@ -41,7 +41,7 @@ import java.util.Set;
  * An {@link AbstractProcessor} that has several (abstract) template method that probably generate a provider from
  * selected locales.
  */
-public abstract class fe extends AbstractProcessor {
+public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
     protected LocaleAwareAnnotationProcessor() {
         super();
