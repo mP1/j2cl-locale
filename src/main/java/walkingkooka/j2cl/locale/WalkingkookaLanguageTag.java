@@ -92,6 +92,7 @@ public final class WalkingkookaLanguageTag {
         return all0(predicate);
     }
 
+    @GwtIncompatible
     private static Set<String> all0(final Predicate<String> filter) {
         final Set<String> all = Sets.sorted();
 
