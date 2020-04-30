@@ -29,6 +29,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -62,6 +63,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     public final synchronized void init(final ProcessingEnvironment environment) {
         super.init(environment);
 
+        this.elements = environment.getElementUtils();
         this.filer = environment.getFiler();
         this.localeFilter = environment.getOptions().get(LOCALE_ANNOTATION_PROCESSOR_OPTION);
         this.messager = environment.getMessager();
@@ -70,13 +72,20 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     @Override
     public final boolean process(final Set<? extends TypeElement> annotations,
                                  final RoundEnvironment environment) {
-        // without this check the generated class will be written multiple times resulting in an exception when attempting to create the file.
-        if (environment.processingOver()) {
-            this.process0();
+        final TypeElement exists = elements.getTypeElement(this.generatedClassName());
+
+        // assume null means generated source does not exist...
+        if (null == exists) {
+            // without this check the generated class will be written multiple times resulting in an exception when attempting to create the file.
+            if (environment.processingOver()) {
+                this.process0();
+            }
         }
 
         return false; // whether or not the set of annotation types are claimed by this processor
     }
+
+    private Elements elements;
 
     /**
      * Read the selected locales from an annotation processor argument, f
