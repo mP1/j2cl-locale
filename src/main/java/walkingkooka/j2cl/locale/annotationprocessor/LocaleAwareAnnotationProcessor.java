@@ -18,6 +18,7 @@
 package walkingkooka.j2cl.locale.annotationprocessor;
 
 import walkingkooka.collect.set.Sets;
+import walkingkooka.j2cl.locale.LocaleAware;
 import walkingkooka.j2cl.locale.WalkingkookaLanguageTag;
 import walkingkooka.text.CharSequences;
 
@@ -54,14 +55,8 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
     @Override
     public final Set<String> getSupportedAnnotationTypes() {
-        return Sets.of(this.annotationType());
+        return Sets.of(LocaleAware.class.getName());
     }
-
-    /**
-     * The fully qualified annotation type that appears on the provider type. The annotation and attributes are irrelevant
-     * the only wish is to run this {@link javax.annotation.processing.Processor}.
-     */
-    protected abstract String annotationType();
 
     @Override
     public final synchronized void init(final ProcessingEnvironment environment) {
@@ -80,7 +75,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
             this.process0();
         }
 
-        return true; // whether or not the set of annotation types are claimed by this processor
+        return false; // whether or not the set of annotation types are claimed by this processor
     }
 
     /**
