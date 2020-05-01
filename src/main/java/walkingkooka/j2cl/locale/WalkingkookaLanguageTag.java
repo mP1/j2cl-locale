@@ -27,6 +27,7 @@ import walkingkooka.text.CharacterConstant;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -128,6 +129,25 @@ public final class WalkingkookaLanguageTag {
         }
 
         return Sets.readOnly(all);
+    }
+
+    /**
+     * Returns all supported locales, this is equivalent of transforming {@link #all()}
+     */
+    @GwtIncompatible
+    public static Set<Locale> locales() {
+        return locales("*");
+    }
+
+    /**
+     * Returns all supported locales filtered using the filter, this is equivalent of transforming {@link #all()}
+     */
+    @GwtIncompatible
+    public static Set<Locale> locales(final String filter) {
+        return all(filter)
+                .stream()
+                .map(Locale::forLanguageTag)
+                .collect(Collectors.toCollection(Sets::ordered));
     }
 
     /**
