@@ -244,6 +244,16 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
         assertTrue(all.contains("en"), () -> "" + all);
     }
 
+    @Test
+    public void testLocalesFiltered() {
+        final String filter = "EN*";
+        assertEquals(WalkingkookaLanguageTag.all(filter),
+                WalkingkookaLanguageTag.locales(filter)
+                        .stream()
+                        .map(Locale::toLanguageTag)
+                        .collect(Collectors.toCollection(Sets::ordered)));
+    }
+
     // parse............................................................................................................
 
     @Test
