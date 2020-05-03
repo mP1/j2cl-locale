@@ -49,12 +49,14 @@ Some examples values include.
 
 
 
-## Example uses
+## Related
 
 The following list, contains emulated Locale aware classes and the annotation processor.
 
-- [Currency](https://github.com/mP1/j2cl-java-util-Currency) support [annotation processor](https://github.com/mP1/j2cl-java-util-currency-annotation-processsor)
-- [Locale](https://github.com/mP1/j2cl-java-util-Locale) support [annotation processor](https://github.com/mP1/j2cl-java-util-locale-annotation-processsor)
+- [Currency](https://github.com/mP1/j2cl-java-util-Currency) supporting [annotation processor](https://github.com/mP1/j2cl-java-util-currency-annotation-processsor)
+- [DateFormatSymbols](https://github.com/mP1/j2cl-java-text) supporting [annotation processor](https://github.com/mP1/j2cl-java-text-annotation-processor/blob/master/src/main/java/walkingkooka/j2cl/java/text/annotationprocessor/DateFormatSymbolsProviderAnnotationProcessor.java)
+- [DecimalFormatSymbols](https://github.com/mP1/j2cl-java-text) supporting [annotation processor](https://github.com/mP1/j2cl-java-text-annotation-processor/blob/master/src/main/java/walkingkooka/j2cl/java/text/annotationprocessor/DecimalFormatSymbolsProviderAnnotationProcessor.java)
+- [Locale](https://github.com/mP1/j2cl-java-util-Locale) supporting [annotation processor](https://github.com/mP1/j2cl-java-util-locale-annotation-processsor)
 
 
 
