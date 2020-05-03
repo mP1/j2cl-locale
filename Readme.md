@@ -51,7 +51,20 @@ Some examples values include.
 
 ## Example uses
 
-TODO Create a list of annotation processors and parent public project.
+The following list, contains emulated Locale aware classes and the annotation processor.
+
+- [Currency](https://github.com/mP1/j2cl-java-util-Currency) support [annotation processor](https://github.com/mP1/j2cl-java-util-currency-annotation-processsor)
+- [Locale](https://github.com/mP1/j2cl-java-util-Locale) support [annotation processor](https://github.com/mP1/j2cl-java-util-locale-annotation-processsor)
+
+
+
+## Authoring annotation processors.
+
+An [abstract AnnotationProcessor](https://github.com/mP1/j2cl-java-util-Locale-annotation-processor/tree/master/src/main/java/walkingkooka/j2cl/java/util/locale/annotationprocessor)
+is available with a few template methods which present the selected locales. It also handles some other housekeeping,
+relating to the annotation processor lifecycle.
+
+ 
 
 # Usage
 
