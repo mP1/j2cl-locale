@@ -38,6 +38,7 @@ import java.io.InputStreamReader;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * An {@link AbstractProcessor} that has several (abstract) template method that probably generate a provider from
@@ -87,21 +88,49 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
     private Elements elements;
 
+    public final String ANNOTATION_PROCESSOR_LOCALES_FILTER = "$FILTERED_LOCALES";
+
+    public final String SELECTED_LOCALES = "$SELECTED_LOCALES";
+
     /**
-     * Read the selected locales from an annotation processor argument, f
+     * Read the selected locales from an annotation processor argument, and generate replacements for various placeholders
+     * in the template.
      */
     private void process0() {
         try {
             final String localeFilter = this.localeFilter();
-            final String replacement = this.generateTemplateMergeReplacement(WalkingkookaLanguageTag.all(localeFilter), this.localeFilter);
             final String template = this.providerTemplate();
-            final String placeholder = this.placeholder();
-            final String merged = template.replace(placeholder, replacement);
 
-            this.writeGeneratedTypeSource(merged);
+            final Set<String> selectedLocales = WalkingkookaLanguageTag.all(localeFilter);
+
+            final String merged = replace(template,
+                    ANNOTATION_PROCESSOR_LOCALES_FILTER,
+                    CharSequences.quoteAndEscape(localeFilter).toString());
+
+            final String merged2 = replace(merged,
+                    SELECTED_LOCALES,
+                    CharSequences.quoteAndEscape(selectedLocales.stream()
+                            .collect(Collectors.joining(",")))
+                            .toString());
+
+            final String merged3 = replace(merged2,
+                    this.placeholder(),
+                    this.generateTemplateMergeReplacement(selectedLocales, localeFilter));
+
+            this.writeGeneratedTypeSource(merged3);
         } catch (final Exception cause) {
             this.error(cause.getMessage());
         }
+    }
+
+    private static String replace(final String template,
+                                  final String placeholder,
+                                  final String value) {
+        final String after = template.replace(placeholder, value);
+        if (template.equals(after)) {
+            throw new IllegalStateException("Unable to find " + CharSequences.quoteAndEscape(placeholder) + " in " + CharSequences.quoteAndEscape(template));
+        }
+        return after;
     }
 
     // locale filter....................................................................................................
