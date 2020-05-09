@@ -22,6 +22,12 @@ import walkingkooka.j2cl.java.io.string.StringDataInputDataOutput;
 import walkingkooka.j2cl.locale.LocaleAware;
 import walkingkooka.j2cl.locale.WalkingkookaLanguageTag;
 import walkingkooka.text.CharSequences;
+import walkingkooka.text.Indentation;
+import walkingkooka.text.LineEnding;
+import walkingkooka.text.printer.IndentingPrinter;
+import walkingkooka.text.printer.Printer;
+import walkingkooka.text.printer.PrinterException;
+import walkingkooka.text.printer.Printers;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
@@ -94,6 +100,10 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
     public final String SELECTED_LOCALES = "$SELECTED_LOCALES";
 
+    public final String DATA_COMMENT = "$DATA_COMMENT";
+
+    public final String DATA = "$DATA";
+
     /**
      * Read the selected locales from an annotation processor argument, and generate replacements for various placeholders
      * in the template.
@@ -116,18 +126,41 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
                             .toString());
 
             final StringBuilder data = new StringBuilder();
-            this.generateTemplateMergeReplacement(selectedLocales,
-                    localeFilter,
-                    StringDataInputDataOutput.output(data::append));
+            final StringBuilder comments = new StringBuilder();
+
+            try (final IndentingPrinter printer = comments(Printers.stringBuilder(comments, LineEnding.SYSTEM))) {
+                this.generate(selectedLocales,
+                        localeFilter,
+                        StringDataInputDataOutput.output(data::append),
+                        printer);
+                printer.flush();
+            }
 
             final String merged3 = replace(merged2,
-                    this.placeholder(),
-                    data.toString());
+                    DATA_COMMENT,
+                    "" + comments);
 
-            this.writeGeneratedTypeSource(merged3);
+            final String merged4 = replace(merged3,
+                    DATA,
+                    "" + CharSequences.quoteAndEscape(data));
+
+            this.writeGeneratedTypeSource(merged4);
         } catch (final Exception cause) {
             this.error(cause.getMessage());
         }
+    }
+
+    public static IndentingPrinter comments(final Printer printer) {
+        return printer.printedLine(LocaleAwareAnnotationProcessor::printedLineHandler)
+                .indenting(Indentation.with("  "));
+    }
+
+    // adds slash slash comments to the beginning of every line.
+    private static void printedLineHandler(final CharSequence line,
+                                           final LineEnding lineEnding,
+                                           final Printer printer)
+            throws PrinterException {
+        printer.print("// " + line + lineEnding);
     }
 
     private static String replace(final String template,
@@ -170,9 +203,10 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     /**
      * This method is invoked with one or more language tags and should return something like a field or method that will appear in the template.
      */
-    protected abstract void generateTemplateMergeReplacement(final Set<String> languageTags,
-                                                             final String filter,
-                                                             final DataOutput data) throws Exception;
+    protected abstract void generate(final Set<String> languageTags,
+                                     final String filter,
+                                     final DataOutput data,
+                                     final IndentingPrinter comments) throws Exception;
 
     // template.........................................................................................................
 
@@ -211,13 +245,6 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
         final String typeName = this.generatedClassName();
         return typeName.substring(typeName.lastIndexOf('.') + 1) + ".java.txt";
     }
-
-    // template merge...................................................................................................
-
-    /**
-     * The placeholder that appears in the template that will be replaced by the response of {@link #generateTemplateMergeReplacement(Set, String, DataOutput)}.
-     */
-    protected abstract String placeholder();
 
     // write source file................................................................................................
 
