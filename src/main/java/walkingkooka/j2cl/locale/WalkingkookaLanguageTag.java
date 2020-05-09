@@ -19,12 +19,15 @@ package walkingkooka.j2cl.locale;
 
 import javaemul.internal.annotations.GwtIncompatible;
 import walkingkooka.NeverError;
+import walkingkooka.collect.list.Lists;
 import walkingkooka.collect.set.Sets;
 import walkingkooka.predicate.Predicates;
 import walkingkooka.text.CaseSensitivity;
 import walkingkooka.text.CharSequences;
 import walkingkooka.text.CharacterConstant;
 
+import java.io.DataInput;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -169,17 +172,18 @@ public final class WalkingkookaLanguageTag {
         return ignored;
     }
 
-    public final static String LOCALE_COMPONENT_SEPARATOR = "/";
-
-    public final static String LOCALE_SEPARATOR = ",";
+    public final static String LOCALE_COMPONENT_SEPARATOR = ",";
 
     /**
      * Locales are comma separated and their components are slash separated.
      */
-    public static List<WalkingkookaLanguageTag> decode(final String encoded) {
-        return Arrays.stream(encoded.split(LOCALE_SEPARATOR))
-                .map(WalkingkookaLanguageTag::decode0)
-                .collect(Collectors.toList());
+    public static List<WalkingkookaLanguageTag> decode(final DataInput encoded) throws IOException  {
+        final int count = encoded.readInt();
+        final List<WalkingkookaLanguageTag> decoded = Lists.array();
+        for(int i = 0; i < count; i++) {
+            decoded.add(decode0(encoded.readUTF()));
+        }
+        return decoded;
     }
 
     public final static int TAG_INDEX = 0;

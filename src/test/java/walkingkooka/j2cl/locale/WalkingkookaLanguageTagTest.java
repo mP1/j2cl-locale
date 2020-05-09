@@ -23,11 +23,14 @@ import walkingkooka.ToStringTesting;
 import walkingkooka.collect.list.Lists;
 import walkingkooka.collect.map.Maps;
 import walkingkooka.collect.set.Sets;
+import walkingkooka.j2cl.java.io.string.StringDataInputDataOutput;
 import walkingkooka.reflect.ClassTesting;
 import walkingkooka.reflect.JavaVisibility;
 import walkingkooka.text.CaseSensitivity;
 import walkingkooka.text.CharSequences;
 
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -42,7 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public final class WalkingkookaLanguageTagTest implements ClassTesting<WalkingkookaLanguageTag>,
-    HashCodeEqualsDefinedTesting2<WalkingkookaLanguageTag>,
+        HashCodeEqualsDefinedTesting2<WalkingkookaLanguageTag>,
         ToStringTesting<WalkingkookaLanguageTag> {
 
     private final static WalkingkookaLanguageTag ROOT = WalkingkookaLanguageTag.with("", "", "", "");
@@ -55,75 +58,125 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
     // decode...........................................................................................................
 
     @Test
-    public void testDecode0Components() {
-        this.decodeAndCheck("",
+    public void testDecode0Components() throws IOException {
+        final StringBuilder text = new StringBuilder();
+        final DataOutput out = StringDataInputDataOutput.output(text::append);
+        out.writeInt(1);
+        out.writeUTF("");
+
+        this.decodeAndCheck(text,
                 ROOT);
     }
 
     @Test
-    public void testDecode1Components() {
-        this.decodeAndCheck("EN",
+    public void testDecode1Components() throws IOException {
+        final StringBuilder text = new StringBuilder();
+        final DataOutput out = StringDataInputDataOutput.output(text::append);
+        out.writeInt(1);
+        out.writeUTF("EN");
+
+        this.decodeAndCheck(text,
                 WalkingkookaLanguageTag.with("EN", "EN", "", ""));
     }
 
     @Test
-    public void testDecode2Components() {
-        this.decodeAndCheck("af-NA/af/NA",
+    public void testDecode2Components() throws IOException {
+        final StringBuilder text = new StringBuilder();
+        final DataOutput out = StringDataInputDataOutput.output(text::append);
+        out.writeInt(1);
+        out.writeUTF("af-NA,af,NA");
+
+        this.decodeAndCheck(text,
                 WalkingkookaLanguageTag.with("af-NA", "af", "NA", ""));
     }
 
     @Test
-    public void testDecode3Components() {
-        this.decodeAndCheck("af-NA/af/NA",
+    public void testDecode3Components() throws IOException {
+        final StringBuilder text = new StringBuilder();
+        final DataOutput out = StringDataInputDataOutput.output(text::append);
+        out.writeInt(1);
+        out.writeUTF("af-NA,af,NA");
+
+        this.decodeAndCheck(text,
                 WalkingkookaLanguageTag.with("af-NA", "af", "NA", ""));
     }
 
     @Test
-    public void testDecode4Components() {
-        this.decodeAndCheck("tag/lang/country",
+    public void testDecode4Components() throws IOException {
+        final StringBuilder text = new StringBuilder();
+        final DataOutput out = StringDataInputDataOutput.output(text::append);
+        out.writeInt(1);
+        out.writeUTF("tag,lang,country");
+
+        this.decodeAndCheck(text,
                 WalkingkookaLanguageTag.with("tag", "lang", "country", ""));
     }
 
     @Test
-    public void testDecode5Components() {
-        this.decodeAndCheck("az-Cyrl-AZ/az/AZ//Cyrl",
+    public void testDecode5Components() throws IOException {
+        final StringBuilder text = new StringBuilder();
+        final DataOutput out = StringDataInputDataOutput.output(text::append);
+        out.writeInt(1);
+        out.writeUTF("az-Cyrl-AZ,az,AZ,,Cyrl");
+
+        this.decodeAndCheck(text,
                 WalkingkookaLanguageTag.with("az-Cyrl-AZ", "az", "AZ", "", "Cyrl"));
     }
 
     @Test
-    public void testSeveral1() {
-        this.decodeAndCheck(",EN,az-Cyrl-AZ/az/AZ//Cyrl",
+    public void testSeveral1() throws IOException {
+        final StringBuilder text = new StringBuilder();
+        final DataOutput out = StringDataInputDataOutput.output(text::append);
+        out.writeInt(3);
+        out.writeUTF("");
+        out.writeUTF("EN");
+        out.writeUTF("az-Cyrl-AZ,az,AZ,,Cyrl");
+
+        this.decodeAndCheck(text,
                 ROOT,
                 WalkingkookaLanguageTag.with("EN", "EN", "", ""),
                 WalkingkookaLanguageTag.with("az-Cyrl-AZ", "az", "AZ", "", "Cyrl"));
     }
 
     @Test
-    public void testSeveral2() {
-        this.decodeAndCheck("EN,CA-FR/CA/FR,DE",
+    public void testSeveral2() throws IOException {
+        final StringBuilder text = new StringBuilder();
+        final DataOutput out = StringDataInputDataOutput.output(text::append);
+        out.writeInt(3);
+        out.writeUTF("EN");
+        out.writeUTF("CA-FR,CA,FR");
+        out.writeUTF("DE");
+
+        this.decodeAndCheck(text,
                 WalkingkookaLanguageTag.with("EN", "EN", "", ""),
                 WalkingkookaLanguageTag.with("CA-FR", "ca", "FR", ""),
                 WalkingkookaLanguageTag.with("DE", "DE", "", ""));
     }
 
     @Test
-    public void testSeveral3() {
-        this.decodeAndCheck("EN,az-Cyrl-AZ/az/AZ//Cyrl",
+    public void testSeveral3() throws IOException {
+        final StringBuilder text = new StringBuilder();
+        final DataOutput out = StringDataInputDataOutput.output(text::append);
+        out.writeInt(2);
+        out.writeUTF("EN");
+        out.writeUTF("az-Cyrl-AZ,az,AZ,,Cyrl");
+
+        this.decodeAndCheck(text,
                 WalkingkookaLanguageTag.with("EN", "EN", "", ""),
                 WalkingkookaLanguageTag.with("az-Cyrl-AZ", "az", "AZ", "", "Cyrl"));
     }
 
-    private void decodeAndCheck(final String encoded,
-                                final WalkingkookaLanguageTag... expected) {
+    private void decodeAndCheck(final CharSequence encoded,
+                                final WalkingkookaLanguageTag... expected) throws IOException {
         this.decodeAndCheck0(encoded, Lists.of(expected));
     }
 
-    private void decodeAndCheck0(final String encoded,
-                                 final List<WalkingkookaLanguageTag> expected) {
+    private void decodeAndCheck0(final CharSequence encoded,
+                                 final List<WalkingkookaLanguageTag> expected) throws IOException {
 
         assertEquals(toString(expected),
-                toString(WalkingkookaLanguageTag.decode(encoded)),
-                "decode " + CharSequences.quote(encoded));
+                toString(WalkingkookaLanguageTag.decode(StringDataInputDataOutput.input(encoded.toString()))),
+                "decode " + encoded);
     }
 
     private static String toString(final List<WalkingkookaLanguageTag> tags) {

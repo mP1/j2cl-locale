@@ -18,6 +18,7 @@
 package walkingkooka.j2cl.locale.annotationprocessor;
 
 import walkingkooka.collect.set.Sets;
+import walkingkooka.j2cl.java.io.string.StringDataInputDataOutput;
 import walkingkooka.j2cl.locale.LocaleAware;
 import walkingkooka.j2cl.locale.WalkingkookaLanguageTag;
 import walkingkooka.text.CharSequences;
@@ -32,6 +33,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
 import java.io.BufferedReader;
+import java.io.DataOutput;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -113,9 +115,14 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
                             .collect(Collectors.joining(",")))
                             .toString());
 
+            final StringBuilder data = new StringBuilder();
+            this.generateTemplateMergeReplacement(selectedLocales,
+                    localeFilter,
+                    StringDataInputDataOutput.output(data::append));
+
             final String merged3 = replace(merged2,
                     this.placeholder(),
-                    this.generateTemplateMergeReplacement(selectedLocales, localeFilter));
+                    data.toString());
 
             this.writeGeneratedTypeSource(merged3);
         } catch (final Exception cause) {
@@ -161,9 +168,11 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     // generate merge replacement.......................................................................................
 
     /**
-     * This method is invoked with one or more language tags and should return a method that will appear in the template.
+     * This method is invoked with one or more language tags and should return something like a field or method that will appear in the template.
      */
-    protected abstract String generateTemplateMergeReplacement(final Set<String> languageTags, final String filter);
+    protected abstract void generateTemplateMergeReplacement(final Set<String> languageTags,
+                                                             final String filter,
+                                                             final DataOutput data) throws Exception;
 
     // template.........................................................................................................
 
@@ -206,7 +215,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     // template merge...................................................................................................
 
     /**
-     * The placeholder that appears in the template that will be replaced by the response of {@link #generateTemplateMergeReplacement(Set, String)}.
+     * The placeholder that appears in the template that will be replaced by the response of {@link #generateTemplateMergeReplacement(Set, String, DataOutput)}.
      */
     protected abstract String placeholder();
 
