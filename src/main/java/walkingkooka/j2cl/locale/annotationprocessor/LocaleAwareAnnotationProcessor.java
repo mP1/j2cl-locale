@@ -142,7 +142,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
             final String merged4 = replace(merged3,
                     DATA,
-                    "" + stringDeclaration(data, 256 * 256 - 1));
+                    "" + stringDeclaration(data, 256 * 64 - 1)); // 16k chars UTF8 encoded cant overflow 64k chars
 
             this.writeGeneratedTypeSource(merged4);
         } catch (final Exception cause) {
