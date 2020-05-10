@@ -142,7 +142,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
             final String merged4 = replace(merged3,
                     DATA,
-                    "" + CharSequences.quoteAndEscape(data));
+                    "" + stringDeclaration(data, 256 * 256 - 1));
 
             this.writeGeneratedTypeSource(merged4);
         } catch (final Exception cause) {
@@ -161,6 +161,40 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
                                            final Printer printer)
             throws PrinterException {
         printer.print("// " + line + lineEnding);
+    }
+
+    static CharSequence stringDeclaration(final CharSequence data, final int max) {
+        return data.length() < max ?
+                CharSequences.quoteAndEscape(data) :
+                stringBuilderSplit(CharSequences.escape(data).toString(), max);
+    }
+
+    private static CharSequence stringBuilderSplit(final String data, final int max) {
+        final StringBuilder statements = new StringBuilder();
+        statements.append("new java.lang.StringBuilder()");
+
+        String left = data;
+
+        do {
+            if (left.length() < max) {
+                statements.append(".append(").append(CharSequences.quote(left)).append(')');
+                break;
+            }
+
+            int end = max - 1;
+            final int slashIndex = left.lastIndexOf('\\', end);
+            if (slashIndex > max - 10) {
+                end = slashIndex;
+            }
+
+            statements.append(".append(")
+                    .append(CharSequences.quote(left.substring(0, end)))
+                    .append(')');
+            left = left.substring(end);
+        } while (false == left.isEmpty());
+
+        statements.append(".toString()");
+        return statements;
     }
 
     private static String replace(final String template,
