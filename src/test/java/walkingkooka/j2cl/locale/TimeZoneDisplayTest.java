@@ -21,8 +21,12 @@ import org.junit.jupiter.api.Test;
 import walkingkooka.HashCodeEqualsDefinedTesting2;
 import walkingkooka.ToStringTesting;
 import walkingkooka.compare.ComparableTesting;
+import walkingkooka.j2cl.java.io.string.StringDataInputDataOutput;
 import walkingkooka.reflect.ClassTesting2;
 import walkingkooka.reflect.JavaVisibility;
+
+import java.io.DataOutput;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -43,6 +47,18 @@ public final class TimeZoneDisplayTest implements ClassTesting2<TimeZoneDisplay>
         assertEquals(SHORT_DAY, display.shortDisplayNameDaylight, "shortDisplayNameDaylight");
         assertEquals(LONG, display.longDisplayName, "longDisplayName");
         assertEquals(LONG, display.longDisplayName, "longDisplayNameDaylight");
+    }
+
+    @Test
+    public void testRead() throws IOException {
+        final StringBuilder text = new StringBuilder();
+        final DataOutput data = StringDataInputDataOutput.output(text::append);
+        data.writeUTF(SHORT);
+        data.writeUTF(SHORT_DAY);
+        data.writeUTF(LONG);
+        data.writeUTF(LONG_DAY);
+
+        assertEquals(this.createObject(), TimeZoneDisplay.read(StringDataInputDataOutput.input(text.toString())));
     }
 
     // ComparableTesting....................................................................................
