@@ -186,10 +186,22 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
                 break;
             }
 
+            // -10 just in case backslash is a part of a unicode sequence.
             int end = max - 1;
-            final int slashIndex = left.lastIndexOf('\\', end);
-            if (slashIndex > max - 10) {
-                end = slashIndex;
+            final int slashIndex = left.lastIndexOf('\\', max - 10);
+            if (-1 != slashIndex) {
+                end = slashIndex - 1;
+                do {
+                    if (left.charAt(end) != '\\') {
+                        end--;
+                        break;
+                    }
+                    end--;
+                    if (0 == end) {
+                        end = max / 2 * 2;
+                        break;
+                    }
+                } while (true);
             }
 
             statements.append(".append(")
