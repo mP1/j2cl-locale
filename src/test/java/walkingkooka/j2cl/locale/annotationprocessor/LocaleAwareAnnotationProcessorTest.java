@@ -63,31 +63,42 @@ public final class LocaleAwareAnnotationProcessorTest implements ClassTesting<Lo
 
     @Test
     public void testStringDeclarationSplitBackslash() {
-        this.stringDeclarationAndCheck("abcdefghijk\tlmnopq",
+        this.stringDeclarationAndCheck("abcdefghijk\\lmnopq",
                 13,
-                "new java.lang.StringBuilder().append(\"abcdefghijk\").append(\"\\tlmnopq\").toString()"
+                "new java.lang.StringBuilder().append(\"abcdefghijk\\\").append(\"\\lmnopq\").toString()"
         );
     }
 
     @Test
     public void testStringDeclarationSplitBackslash2() {
-        this.stringDeclarationAndCheck("abcdefghij\tklmnopq",
+        this.stringDeclarationAndCheck("abcdefghij\\klmnopq",
                 13,
-                "new java.lang.StringBuilder().append(\"abcdefghij\").append(\"\\tklmnopq\").toString()"
+                "new java.lang.StringBuilder().append(\"abcdefghij\\\\\").append(\"klmnopq\").toString()"
         );
     }
 
     @Test
     public void testStringDeclarationSplitBackslash3() {
-        this.stringDeclarationAndCheck("a\tbcdefghijklmnopq",
+        this.stringDeclarationAndCheck("a\\bcdefghijklmnopq",
                 13,
-                "new java.lang.StringBuilder().append(\"a\\tbcdefghij\").append(\"klmnopq\").toString()"
+                "new java.lang.StringBuilder().append(\"a\\\\bcdefghij\").append(\"klmnopq\").toString()"
+        );
+    }
+
+    @Test
+    public void testStringDeclarationSplitBackslash4() {
+        this.stringDeclarationAndCheck("abcdefghijklmnopq\\",
+                13,
+                "new java.lang.StringBuilder().append(\"abcdefghijkl\").append(\"mnopq\\\\\").toString()"
         );
     }
 
     private void stringDeclarationAndCheck(final String text, final int max, final String expected) {
-        assertEquals(expected,
-                LocaleAwareAnnotationProcessor.stringDeclaration(text, max).toString(),
+        final String string = LocaleAwareAnnotationProcessor.stringDeclaration(text, max).toString();
+        System.out.println(string);
+
+        assertEquals(CharSequences.escape(expected).toString(),
+                CharSequences.escape(string).toString(),
                 ()-> CharSequences.quoteAndEscape(text) + " max=" + max);
     }
 
