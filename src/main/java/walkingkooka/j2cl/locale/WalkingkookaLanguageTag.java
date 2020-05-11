@@ -44,23 +44,11 @@ import java.util.stream.Collectors;
  */
 public final class WalkingkookaLanguageTag {
 
-    public final static CharacterConstant SEPARATOR = CharacterConstant.with('-');
-
     /**
-     * Returns a {@link Set} containing all {@link String languageTags} including their alternate forms.
+     * Helper that accepts a comma separated list if filters, with support for wildcard which matches everything
+     * and trailing wildcards.
      */
-    @GwtIncompatible
-    public static Set<String> all() {
-        return all("*");
-    }
-
-    /**
-     * The filter may have multiple patterns separated by csvs, each pattern can end in a wildcard or star.
-     * An annotation processor could fetch the filter from a system property and use that to filter requested locales language tags
-     * for final processing.
-     */
-    @GwtIncompatible
-    public static Set<String> all(final String filter) {
+    public static Predicate<String> filter(final String filter) {
         CharSequences.failIfNullOrEmpty(filter, "filter");
 
         final String[] tokens = filter.split(",");
@@ -69,10 +57,12 @@ public final class WalkingkookaLanguageTag {
         }
 
         Predicate<String> predicate = Predicates.never();
+        String toString = filter;
 
         for (final String token : tokens) {
             if (token.equals("*")) {
                 predicate = Predicates.always();
+                toString = "*";
                 break;
             }
 
@@ -93,7 +83,27 @@ public final class WalkingkookaLanguageTag {
             predicate = predicate.or(token::equalsIgnoreCase);
         }
 
-        return all0(predicate);
+        return Predicates.customToString(predicate, toString);
+    }
+
+    public final static CharacterConstant SEPARATOR = CharacterConstant.with('-');
+
+    /**
+     * Returns a {@link Set} containing all {@link String languageTags} including their alternate forms.
+     */
+    @GwtIncompatible
+    public static Set<String> all() {
+        return all("*");
+    }
+
+    /**
+     * The filter may have multiple patterns separated by csvs, each pattern can end in a wildcard or star.
+     * An annotation processor could fetch the filter from a system property and use that to filter requested locales language tags
+     * for final processing.
+     */
+    @GwtIncompatible
+    public static Set<String> all(final String filter) {
+        return all0(filter(filter));
     }
 
     @GwtIncompatible
