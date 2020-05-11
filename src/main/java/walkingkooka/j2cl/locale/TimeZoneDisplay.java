@@ -71,7 +71,7 @@ public final class TimeZoneDisplay implements Comparable<TimeZoneDisplay> {
     public final String longDisplayNameDaylight;
 
     @GwtIncompatible
-    final void write(final DataOutput data) throws IOException {
+    public final void write(final DataOutput data) throws IOException {
         data.writeUTF(this.shortDisplayName);
         data.writeUTF(this.shortDisplayNameDaylight);
         data.writeUTF(this.longDisplayName);
