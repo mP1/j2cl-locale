@@ -45,7 +45,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -74,9 +76,12 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
         this.elements = environment.getElementUtils();
         this.filer = environment.getFiler();
-        this.localeFilter = environment.getOptions().get(LOCALE_ANNOTATION_PROCESSOR_OPTION);
+        this.arguments = environment.getOptions();
+        this.localeFilter = this.arguments.get(LOCALE_ANNOTATION_PROCESSOR_OPTION);
         this.messager = environment.getMessager();
     }
+
+    private Map<String, String> arguments;
 
     @Override
     public final boolean process(final Set<? extends TypeElement> annotations,
@@ -130,7 +135,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
             try (final IndentingPrinter printer = comments(Printers.stringBuilder(comments, LineEnding.SYSTEM))) {
                 this.generate(selectedLocales,
-                        localeFilter,
+                        this.arguments::get,
                         StringDataInputDataOutput.output(data::append),
                         printer);
                 printer.flush();
@@ -210,9 +215,17 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     // locale filter....................................................................................................
 
     @Override
-    public final Set<String> getSupportedOptions() {
-        return Sets.of(LOCALE_ANNOTATION_PROCESSOR_OPTION);
+    public Set<String> getSupportedOptions() {
+        final Set<String> arguments = Sets.ordered();
+        arguments.add(LOCALE_ANNOTATION_PROCESSOR_OPTION);
+        arguments.addAll(this.additionalArguments());
+        return arguments;
     }
+
+    /**
+     * Additional annotation processor arguments in addition to {@link #LOCALE_ANNOTATION_PROCESSOR_OPTION}.
+     */
+    protected abstract Set<String> additionalArguments();
 
     /**
      * Returns the annotation processor locale filter option or fails.
@@ -238,7 +251,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
      * This method is invoked with one or more language tags and should return something like a field or method that will appear in the template.
      */
     protected abstract void generate(final Set<String> languageTags,
-                                     final String filter,
+                                     final Function<String, String> parameters,
                                      final DataOutput data,
                                      final IndentingPrinter comments) throws Exception;
 
