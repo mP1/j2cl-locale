@@ -22,10 +22,6 @@
         <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
     </properties>
 
-    <prerequisites>
-        <maven>${maven.required.version}</maven>
-    </prerequisites>
-
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
