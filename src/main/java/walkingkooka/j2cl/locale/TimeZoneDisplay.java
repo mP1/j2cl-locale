@@ -35,17 +35,17 @@ public final class TimeZoneDisplay implements Comparable<TimeZoneDisplay> {
     /**
      * Should only be used by {@link TimeZone} during initialization.
      */
-    static TimeZoneDisplay read(final DataInput data) throws IOException {
+    public static TimeZoneDisplay read(final DataInput data) throws IOException {
         return with(data.readUTF(),
                 data.readUTF(),
                 data.readUTF(),
                 data.readUTF());
     }
 
-    static TimeZoneDisplay with(final String shortDisplayName,
-                                final String shortDisplayNameDaylight,
-                                final String longDisplayName,
-                                final String longDisplayNameDaylight) {
+    public static TimeZoneDisplay with(final String shortDisplayName,
+                                       final String shortDisplayNameDaylight,
+                                       final String longDisplayName,
+                                       final String longDisplayNameDaylight) {
         return new TimeZoneDisplay(shortDisplayName,
                 shortDisplayNameDaylight,
                 longDisplayName,
