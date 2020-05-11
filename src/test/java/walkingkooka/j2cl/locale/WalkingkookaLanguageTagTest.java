@@ -24,6 +24,7 @@ import walkingkooka.collect.list.Lists;
 import walkingkooka.collect.map.Maps;
 import walkingkooka.collect.set.Sets;
 import walkingkooka.j2cl.java.io.string.StringDataInputDataOutput;
+import walkingkooka.predicate.PredicateTesting;
 import walkingkooka.reflect.ClassTesting;
 import walkingkooka.reflect.JavaVisibility;
 import walkingkooka.text.CaseSensitivity;
@@ -46,7 +47,95 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public final class WalkingkookaLanguageTagTest implements ClassTesting<WalkingkookaLanguageTag>,
         HashCodeEqualsDefinedTesting2<WalkingkookaLanguageTag>,
+        PredicateTesting,
         ToStringTesting<WalkingkookaLanguageTag> {
+
+    // filter...........................................................................................................
+
+    @Test
+    public void testFilterNullFails() {
+        assertThrows(NullPointerException.class, () -> WalkingkookaLanguageTag.filter(null));
+    }
+
+    @Test
+    public void testFilterEmptyFails() {
+        assertThrows(IllegalArgumentException.class, () -> WalkingkookaLanguageTag.filter(""));
+    }
+
+    @Test
+    public void testFilterWildcard() {
+        this.testTrue("*", "A");
+    }
+
+    @Test
+    public void testFilterWildcard2() {
+        this.testTrue("*", "a");
+    }
+
+    @Test
+    public void testFilterWildcard3() {
+        this.testTrue("A,B,C,*", "XYZ");
+    }
+
+    @Test
+    public void testFilterExact() {
+        this.testTrue("A,B", "A");
+    }
+
+    @Test
+    public void testFilterExact2() {
+        this.testTrue("A,B", "B");
+    }
+
+    @Test
+    public void testFilterExact3() {
+        this.testFalse("A,B", "AB");
+    }
+
+    @Test
+    public void testFilterEndsWildcard() {
+        this.testFalse("A*,B", "Z");
+    }
+
+    @Test
+    public void testFilterEndsWildcard2() {
+        this.testTrue("A*,B", "A");
+    }
+
+    @Test
+    public void testFilterEndsWildcard3() {
+        this.testTrue("A*,B*", "B");
+    }
+
+    @Test
+    public void testFilterEndsWildcard4() {
+        this.testTrue("A*,B*", "B2");
+    }
+
+    private void testTrue(final String filter, final String value) {
+        this.testTrue(WalkingkookaLanguageTag.filter(filter), value);
+    }
+
+    private void testFalse(final String filter, final String value) {
+        this.testFalse(WalkingkookaLanguageTag.filter(filter), value);
+    }
+
+    @Test
+    public void testFilterToStringWildcard() {
+        this.toStringAndCheck(WalkingkookaLanguageTag.filter("*"), "*");
+    }
+
+    @Test
+    public void testFilterToStringIncludesWildcard() {
+        this.toStringAndCheck(WalkingkookaLanguageTag.filter("A,*"), "*");
+    }
+
+    @Test
+    public void testFilterToStringMany() {
+        this.toStringAndCheck(WalkingkookaLanguageTag.filter("A,B*,C*"), "A,B*,C*");
+    }
+
+    // .................................................................................................................
 
     private final static WalkingkookaLanguageTag ROOT = WalkingkookaLanguageTag.with("", "", "", "");
 
