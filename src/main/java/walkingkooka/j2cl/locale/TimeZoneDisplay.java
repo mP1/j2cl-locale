@@ -109,7 +109,6 @@ public final class TimeZoneDisplay implements Comparable<TimeZoneDisplay> {
 
     // Comparable.......................................................................................................
 
-    @GwtIncompatible
     @Override
     public int compareTo(final TimeZoneDisplay other) {
         return this.toString().compareTo(other.toString());
