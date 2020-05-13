@@ -18,6 +18,28 @@ by [j2cl-java-util-Locale](https://travis-ci.com/mP1/j2cl-java-util-Locale)].
 
 
 
+## Logging (javac annotation processor argument)
+
+Logging by all related annotation processors may be controlled by the `walkingkooka.j2cl.locale.Logging` annotation. 
+
+- NONE Nothing is written anywhere
+- SLASH_SLASH_COMMENTS The generated java source file will contain slash slash comments holding the content.
+- TXT_FILE A txt file will be created to match the class file for the generated *.java file plus the file extension `DATA.txt`.
+
+The last two options will contain readable text of the value of the generated provider `private final static String DATA` field. 
+
+```txt
+// en-001              language=en         country=001         variant=            script=             encoded=en-001,en,001
+// en-150              language=en         country=150         variant=            script=             encoded=en-150,en,150
+// en-AG               language=en         country=AG          variant=            script=             encoded=en-AG,en,AG
+...
+ public final static String DATA = preventInlining("106,en,en-001\\,en\...
+```
+
+![Sample TXT_FILE](walkingkooka.j2cl.logging.Logging.png)
+
+
+
 ## Locale selection (javac annotation processor argument)
 
 The locales must be selected by setting a [annotation argument](https://docs.oracle.com/javase/7/docs/technotes/tools/windows/javac.html)
@@ -29,6 +51,9 @@ Some examples values include.
 - `EN` Only includes the `EN` locale without including `EN-US` or `EN-GB`.
 - `EN-*` Includes all locales beginning with `EN`.
 - `EN-*,FR-*` Include all English and French locales.
+
+
+
 
 ### Maven annotation processor argument
 
@@ -42,6 +67,7 @@ Some examples values include.
         <target>9</target>
         <compilerArgs>
             <arg>-Awalkingkooka.j2cl.java.util.Locale=EN-*</arg>
+            <arg>-Awalkingkooka.j2cl.locale.Logging=TXT_FILE</arg>
         </compilerArgs>
     </configuration>
 </plugin>
