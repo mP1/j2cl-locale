@@ -21,6 +21,7 @@ import walkingkooka.collect.set.Sets;
 import walkingkooka.j2cl.java.io.string.StringDataInputDataOutput;
 import walkingkooka.j2cl.locale.LocaleAware;
 import walkingkooka.j2cl.locale.WalkingkookaLanguageTag;
+import walkingkooka.reflect.ClassName;
 import walkingkooka.text.CharSequences;
 import walkingkooka.text.Indentation;
 import walkingkooka.text.LineEnding;
@@ -38,6 +39,7 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
+import javax.tools.StandardLocation;
 import java.io.BufferedReader;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -45,6 +47,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -78,6 +81,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
         this.filer = environment.getFiler();
         this.arguments = environment.getOptions();
         this.localeFilter = this.arguments.get(LOCALE_ANNOTATION_PROCESSOR_OPTION);
+        this.logging = this.arguments.get(LOGGING_ANNOTATION_PROCESSOR_OPTION);
         this.messager = environment.getMessager();
     }
 
@@ -101,13 +105,13 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
     private Elements elements;
 
-    public final String ANNOTATION_PROCESSOR_LOCALES_FILTER = "$FILTERED_LOCALES";
+    public final static String ANNOTATION_PROCESSOR_LOCALES_FILTER = "$FILTERED_LOCALES";
 
-    public final String SELECTED_LOCALES = "$SELECTED_LOCALES";
+    public final static String SELECTED_LOCALES = "$SELECTED_LOCALES";
 
-    public final String DATA_COMMENT = "$DATA_COMMENT";
+    public final static String DATA_COMMENT = "$DATA_COMMENT";
 
-    public final String DATA = "$DATA";
+    public final static String DATA = "$DATA";
 
     /**
      * Read the selected locales from an annotation processor argument, and generate replacements for various placeholders
@@ -115,6 +119,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
      */
     private void process0() {
         try {
+            final Logging logging = this.logging();
             final String localeFilter = this.localeFilter();
             final String template = this.providerTemplate();
 
@@ -133,7 +138,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
             final StringBuilder data = new StringBuilder();
             final StringBuilder comments = new StringBuilder();
 
-            try (final IndentingPrinter printer = comments(Printers.stringBuilder(comments, LineEnding.SYSTEM))) {
+            try (final IndentingPrinter printer = logging.loggingDestination(comments, this)) {
                 this.generate(selectedLocales,
                         this.arguments::get,
                         StringDataInputDataOutput.output(data::append),
@@ -141,9 +146,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
                 printer.flush();
             }
 
-            final String merged3 = replace(merged2,
-                    DATA_COMMENT,
-                    "" + comments);
+            final String merged3 = logging.replaceTemplatePlaceholder(merged2, comments);
 
             final String merged4 = replace(merged3,
                     DATA,
@@ -157,8 +160,20 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
     public static IndentingPrinter comments(final Printer printer) {
         return printer.printedLine(LocaleAwareAnnotationProcessor::printedLineHandler)
-                .indenting(Indentation.with("  "));
+                .indenting(INDENTATION);
     }
+
+    final IndentingPrinter createLoggingTextFile() throws IOException {
+        final ClassName type = ClassName.with(this.generatedClassName());
+
+        final Writer writer = this.filer.createResource(StandardLocation.CLASS_OUTPUT,
+                type.parentPackage().value(),
+                type.nameWithoutPackage() + ".DATA.log").openWriter();
+        return Printers.writer(writer, LineEnding.SYSTEM)
+                .indenting(INDENTATION);
+    }
+
+    private final static Indentation INDENTATION = Indentation.with("  ");
 
     // adds slash slash comments to the beginning of every line.
     private static void printedLineHandler(final CharSequence line,
@@ -214,9 +229,9 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
         return statements;
     }
 
-    private static String replace(final String template,
-                                  final String placeholder,
-                                  final String value) {
+    static String replace(final String template,
+                          final String placeholder,
+                          final String value) {
         final String after = template.replace(placeholder, value);
         if (template.equals(after)) {
             throw new IllegalStateException("Unable to find " + CharSequences.quoteAndEscape(placeholder) + " in " + CharSequences.quoteAndEscape(template));
@@ -239,6 +254,8 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
      */
     protected abstract Set<String> additionalArguments();
 
+    // locale...........................................................................................................
+
     /**
      * Returns the annotation processor locale filter option or fails.
      */
@@ -256,6 +273,37 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
      * The annotation processor option that has the csv list of locale selectors.
      */
     private final static String LOCALE_ANNOTATION_PROCESSOR_OPTION = "walkingkooka.j2cl.java.util.Locale";
+
+    // logging..........................................................................................................
+
+    /**
+     * Returns the annotation processor {@link Logging} fails if absent.
+     */
+    private Logging logging() {
+        final String logging = this.logging;
+        if (null == logging) {
+            this.reportLoggingAnnotationProcessorArgumentFail("Missing annotation processor argument");
+        }
+
+        try {
+            return Logging.valueOf(logging);
+        } catch (final Exception ignore) {
+            return this.reportLoggingAnnotationProcessorArgumentFail("Bad annotation processor argument");
+        }
+    }
+
+    private Logging reportLoggingAnnotationProcessorArgumentFail(final String message) {
+        throw new IllegalStateException(message + " " +
+                CharSequences.quote(LOGGING_ANNOTATION_PROCESSOR_OPTION) + "=" + CharSequences.quoteIfChars(logging) +
+                ", expected one of " + Arrays.stream(Logging.values()).map(Logging::name).collect(Collectors.joining(", ")));
+    }
+
+    private String logging;
+
+    /**
+     * The annotation processor option that controls generated class logging destination.
+     */
+    private final static String LOGGING_ANNOTATION_PROCESSOR_OPTION = "walkingkooka.j2cl.locale.Logging";
 
     // generate merge replacement.......................................................................................
 
