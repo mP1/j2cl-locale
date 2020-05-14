@@ -38,12 +38,18 @@ public final class LocaleAwareAnnotationProcessorTool implements PublicStaticHel
         return left.toLanguageTag().compareTo(right.toLanguageTag());
     }
 
+    public static <T extends Comparable<T>> Map<T, Set<Locale>> buildMultiLocaleMap(final Function<Locale, T> extractor,
+                                                                                    final Set<Locale> locales) {
+        return buildMultiLocaleMap(Comparator.naturalOrder(), extractor, locales);
+    }
+
     /**
      * Builds a {@link Map} with values that share common {@link Locale locales}, think grouping but to a {@link Set}
      */
-    public static <T extends Comparable<T>> Map<T, Set<Locale>> buildMultiLocaleMap(final Function<Locale, T> extractor,
-                                                                                    final Set<Locale> locales) {
-        final Map<T, Set<Locale>> map = Maps.sorted();
+    public static <T> Map<T, Set<Locale>> buildMultiLocaleMap(final Comparator<T> comparator,
+                                                              final Function<Locale, T> extractor,
+                                                              final Set<Locale> locales) {
+        final Map<T, Set<Locale>> map = Maps.sorted(comparator);
 
         for (final Locale locale : locales) {
             final T value = extractor.apply(locale);
