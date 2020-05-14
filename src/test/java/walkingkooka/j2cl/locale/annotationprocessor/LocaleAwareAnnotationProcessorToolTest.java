@@ -34,6 +34,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public final class LocaleAwareAnnotationProcessorToolTest implements PublicStaticHelperTesting<LocaleAwareAnnotationProcessorTool> {
 
     @Test
+    public void testBuildMultiLocaleMapWithComparator() {
+        final Locale EN_AU = Locale.forLanguageTag("EN-AU");
+        final Locale FR_FR = Locale.forLanguageTag("FR-FR");
+        final Locale ES_ES = Locale.forLanguageTag("ES-ES");
+
+        final Map<String, Set<Locale>> sundayToLocales = Maps.sorted();
+        sundayToLocales.put("Sunday", Sets.of(EN_AU));
+        sundayToLocales.put("dimanche", Sets.of(FR_FR));
+        sundayToLocales.put("domingo", Sets.of(ES_ES));
+
+        assertEquals(sundayToLocales,
+                LocaleAwareAnnotationProcessorTool.buildMultiLocaleMap(String.CASE_INSENSITIVE_ORDER,
+                        LocaleAwareAnnotationProcessorToolTest::firstDayOfWeek,
+                        Sets.of(EN_AU, FR_FR, ES_ES)));
+    }
+
+    @Test
     public void testBuildMultiLocaleMap() {
         final Locale EN_AU = Locale.forLanguageTag("EN-AU");
         final Locale FR_FR = Locale.forLanguageTag("FR-FR");
