@@ -21,6 +21,8 @@ import javaemul.internal.annotations.GwtIncompatible;
 import walkingkooka.NeverError;
 import walkingkooka.collect.list.Lists;
 import walkingkooka.collect.set.Sets;
+import walkingkooka.j2cl.locale.annotationprocessor.LocaleAwareAnnotationProcessor;
+import walkingkooka.j2cl.locale.annotationprocessor.LocaleAwareAnnotationProcessorTool;
 import walkingkooka.predicate.Predicates;
 import walkingkooka.text.CaseSensitivity;
 import walkingkooka.text.CharSequences;
@@ -156,10 +158,7 @@ public final class WalkingkookaLanguageTag {
      */
     @GwtIncompatible
     public static Set<Locale> locales(final String filter) {
-        return all(filter)
-                .stream()
-                .map(Locale::forLanguageTag)
-                .collect(Collectors.toCollection(Sets::ordered));
+        return LocaleAwareAnnotationProcessorTool.toLocales(all(filter));
     }
 
     /**
