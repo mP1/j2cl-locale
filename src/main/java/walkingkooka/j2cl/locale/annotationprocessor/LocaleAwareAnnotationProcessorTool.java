@@ -24,6 +24,7 @@ import walkingkooka.reflect.PublicStaticHelper;
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -72,6 +73,30 @@ public final class LocaleAwareAnnotationProcessorTool implements PublicStaticHel
         }
 
         return map;
+    }
+
+    /**
+     * Finds the value with the most {@link Locale locales}. If multiple values have the same count, the first is returned.
+     */
+    public static <T> T findMostPopularLocaleKey(final Map<T, Set<Locale>> valueToLocales) {
+        // find the most popular display
+        int mostLocaleCounts = -1;
+        T most = null;
+
+        for (final Entry<T, Set<Locale>> valueAndLocales : valueToLocales.entrySet()) {
+            final T value = valueAndLocales.getKey();
+            final Set<Locale> locales = valueAndLocales.getValue();
+            final int count = locales.size();
+
+            if (count > mostLocaleCounts) {
+                if (count > mostLocaleCounts) {
+                    mostLocaleCounts = count;
+                    most = value;
+                }
+            }
+        }
+
+        return most;
     }
 
     /**

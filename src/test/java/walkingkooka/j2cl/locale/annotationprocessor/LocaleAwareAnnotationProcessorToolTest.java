@@ -95,6 +95,49 @@ public final class LocaleAwareAnnotationProcessorToolTest implements PublicStati
         return DateFormatSymbols.getInstance(locale).getWeekdays()[1];
     }
 
+    @Test
+    public void testFindMostPopularLocaleKey() {
+        final Map<CharSequence, Set<Locale>> valueToLocales = Maps.ordered();
+        valueToLocales.put("MOST", Sets.of(Locale.ENGLISH, Locale.FRANCE));
+        valueToLocales.put(new StringBuilder("LEAST"), Sets.of(Locale.CANADA));
+
+        this.findMostPopularLocaleKey(valueToLocales, "MOST");
+    }
+
+    @Test
+    public void testFindMostPopularLocaleKey2() {
+        final Map<CharSequence, Set<Locale>> valueToLocales = Maps.ordered();
+        valueToLocales.put(new StringBuilder("LEAST"), Sets.of(Locale.CANADA));
+        valueToLocales.put("MOST", Sets.of(Locale.ENGLISH, Locale.FRANCE));
+
+        this.findMostPopularLocaleKey(valueToLocales, "MOST");
+    }
+
+    @Test
+    public void testFindMostPopularLocaleKey3() {
+        final Map<CharSequence, Set<Locale>> valueToLocales = Maps.ordered();
+        valueToLocales.put("MOST", Sets.of(Locale.ENGLISH, Locale.FRANCE, Locale.CANADA));
+        valueToLocales.put(new StringBuilder("1"), Sets.of(Locale.CHINA));
+        valueToLocales.put(new StringBuilder("2"), Sets.of(Locale.GERMAN));
+
+        this.findMostPopularLocaleKey(valueToLocales, "MOST");
+    }
+
+    @Test
+    public void testFindMostPopularLocaleKeyFirst() {
+        final Map<CharSequence, Set<Locale>> valueToLocales = Maps.ordered();
+        valueToLocales.put("MOST", Sets.of(Locale.ENGLISH, Locale.FRANCE, Locale.CANADA));
+        valueToLocales.put("MOST2", Sets.of(Locale.ENGLISH, Locale.FRANCE, Locale.CANADA));
+
+        this.findMostPopularLocaleKey(valueToLocales, "MOST");
+    }
+
+    private void findMostPopularLocaleKey(final Map<CharSequence, Set<Locale>> valueToLocales,
+                                          final CharSequence expected) {
+        assertEquals(expected.toString(),
+                LocaleAwareAnnotationProcessorTool.findMostPopularLocaleKey(valueToLocales).toString());
+    }
+
     @Override
     public Class<LocaleAwareAnnotationProcessorTool> type() {
         return LocaleAwareAnnotationProcessorTool.class;
