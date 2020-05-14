@@ -34,6 +34,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public final class LocaleAwareAnnotationProcessorToolTest implements PublicStaticHelperTesting<LocaleAwareAnnotationProcessorTool> {
 
     @Test
+    public void testToLocales() {
+        assertEquals(Sets.of(Locale.forLanguageTag("EN-AU")),
+                LocaleAwareAnnotationProcessorTool.toLocales(Sets.of("EN-AU")));
+    }
+
+    @Test
     public void testBuildMultiLocaleMapWithComparator() {
         final Locale EN_AU = Locale.forLanguageTag("EN-AU");
         final Locale FR_FR = Locale.forLanguageTag("FR-FR");

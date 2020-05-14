@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public final class LocaleAwareAnnotationProcessorTool implements PublicStaticHelper {
 
@@ -36,6 +37,15 @@ public final class LocaleAwareAnnotationProcessorTool implements PublicStaticHel
 
     private static int compareLocaleLanguageTag(final Locale left, final Locale right) {
         return left.toLanguageTag().compareTo(right.toLanguageTag());
+    }
+
+    /**
+     * Converts the language tags to {@link Locale locales}.
+     */
+    public static Set<Locale> toLocales(final Set<String> languageTags) {
+        return languageTags.stream()
+                .map(Locale::forLanguageTag)
+                .collect(Collectors.toCollection(() -> Sets.sorted(LOCALE_COMPARATOR)));
     }
 
     public static <T extends Comparable<T>> Map<T, Set<Locale>> buildMultiLocaleMap(final Function<Locale, T> extractor,
