@@ -109,6 +109,11 @@ public final class LocaleAwareAnnotationProcessorTool implements PublicStaticHel
                 .map(Locale::toLanguageTag)
                 .collect(Collectors.joining(", ")));
 
+        writeLocales(locales, data);
+    }
+
+    public static void writeLocales(final Set<Locale> locales,
+                                    final DataOutput data) throws IOException {
         data.writeInt(locales.size());
         for (final Locale locale : locales) {
             data.writeUTF(locale.toLanguageTag());
