@@ -92,10 +92,8 @@ public final class LocaleAwareAnnotationProcessorTool implements PublicStaticHel
             final int count = locales.size();
 
             if (count > mostLocaleCounts) {
-                if (count > mostLocaleCounts) {
-                    mostLocaleCounts = count;
-                    most = value;
-                }
+                mostLocaleCounts = count;
+                most = value;
             }
         }
 
