@@ -20,7 +20,10 @@ package walkingkooka.j2cl.locale.annotationprocessor;
 import walkingkooka.collect.map.Maps;
 import walkingkooka.collect.set.Sets;
 import walkingkooka.reflect.PublicStaticHelper;
+import walkingkooka.text.printer.IndentingPrinter;
 
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.Map;
@@ -97,6 +100,21 @@ public final class LocaleAwareAnnotationProcessorTool implements PublicStaticHel
         }
 
         return most;
+    }
+
+    public static void generateLocales(final Set<Locale> locales,
+                                       final DataOutput data,
+                                       final String label,
+                                       final IndentingPrinter comments) throws IOException {
+        comments.lineStart();
+        comments.print(label + "=" + locales.stream()
+                .map(Locale::toLanguageTag)
+                .collect(Collectors.joining(", ")));
+
+        data.writeInt(locales.size());
+        for (final Locale locale : locales) {
+            data.writeUTF(locale.toLanguageTag());
+        }
     }
 
     /**
