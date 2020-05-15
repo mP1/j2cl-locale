@@ -16,15 +16,29 @@
 package test;
 
 import com.google.j2cl.junit.apt.J2clTestInput;
+import java.io.DataInput;
 import java.io.DataOutput;
 import org.junit.Assert;
 import org.junit.Test;
+import walkingkooka.j2cl.locale.TimeZoneCalendar;
 import walkingkooka.j2cl.locale.TimeZoneDisplay;
 import walkingkooka.j2cl.locale.WalkingkookaLanguageTag;
 import walkingkooka.j2cl.java.io.string.StringDataInputDataOutput;
 
 @J2clTestInput(JunitTest.class)
 public class JunitTest {
+
+    @Test
+    public void testTimeZoneCalendar() throws Exception {
+        final StringBuilder data = new StringBuilder();
+        final DataOutput dataOutput = StringDataInputDataOutput.output(data::append);
+
+        final TimeZoneCalendar calendar = TimeZoneCalendar.with(1 , 2);
+        calendar.write(dataOutput);
+
+        final DataInput dataInput = StringDataInputDataOutput.input(data.toString());
+        Assert.assertEquals(TimeZoneCalendar.read(dataInput), calendar);
+    }
 
     @Test
     public void testTimeZoneDisplay() throws Exception {
