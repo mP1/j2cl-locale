@@ -16,17 +16,30 @@
 package test;
 
 import com.google.j2cl.junit.apt.J2clTestInput;
-import java.io.DataInput;
-import java.io.DataOutput;
 import org.junit.Assert;
 import org.junit.Test;
+import walkingkooka.j2cl.java.io.string.StringDataInputDataOutput;
+import walkingkooka.j2cl.locale.Calendar;
+import walkingkooka.j2cl.locale.GregorianCalendar;
 import walkingkooka.j2cl.locale.TimeZoneCalendar;
 import walkingkooka.j2cl.locale.TimeZoneDisplay;
 import walkingkooka.j2cl.locale.WalkingkookaLanguageTag;
-import walkingkooka.j2cl.java.io.string.StringDataInputDataOutput;
+
+import java.io.DataInput;
+import java.io.DataOutput;
 
 @J2clTestInput(JunitTest.class)
 public class JunitTest {
+
+    @Test
+    public void testCalendar() throws Exception {
+        Assert.assertEquals("Calendar.JANUARY", 0, Calendar.JANUARY);
+    }
+
+    @Test
+    public void testGregorianCalendar() throws Exception {
+        Assert.assertEquals("GregorianCalendar.BC", 0, GregorianCalendar.BC);
+    }
 
     @Test
     public void testTimeZoneCalendar() throws Exception {
