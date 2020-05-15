@@ -68,8 +68,8 @@ public final class TimeZoneCalendar implements Comparable<TimeZoneCalendar> {
         data.writeInt(this.minimalDaysInFirstWeek);
     }
 
-    final int firstDayOfWeek;
-    final int minimalDaysInFirstWeek;
+    public final int firstDayOfWeek;
+    public final int minimalDaysInFirstWeek;
 
     @Override
     public int hashCode() {
