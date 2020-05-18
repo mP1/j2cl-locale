@@ -100,26 +100,6 @@ public final class LocaleAwareAnnotationProcessorTool implements PublicStaticHel
         return most;
     }
 
-    public static void generateLocales(final Set<Locale> locales,
-                                       final DataOutput data,
-                                       final String label,
-                                       final IndentingPrinter comments) throws IOException {
-        comments.lineStart();
-        comments.print(label + "=" + locales.stream()
-                .map(Locale::toLanguageTag)
-                .collect(Collectors.joining(", ")));
-
-        writeLocales(locales, data);
-    }
-
-    public static void writeLocales(final Set<Locale> locales,
-                                    final DataOutput data) throws IOException {
-        data.writeInt(locales.size());
-        for (final Locale locale : locales) {
-            data.writeUTF(locale.toLanguageTag());
-        }
-    }
-
     /**
      * Stop creation
      */
