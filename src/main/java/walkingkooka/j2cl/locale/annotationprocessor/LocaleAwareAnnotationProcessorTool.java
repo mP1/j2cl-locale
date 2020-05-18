@@ -20,10 +20,7 @@ package walkingkooka.j2cl.locale.annotationprocessor;
 import walkingkooka.collect.map.Maps;
 import walkingkooka.collect.set.Sets;
 import walkingkooka.reflect.PublicStaticHelper;
-import walkingkooka.text.printer.IndentingPrinter;
 
-import java.io.DataOutput;
-import java.io.IOException;
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.Map;
