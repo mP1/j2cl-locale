@@ -266,7 +266,7 @@ public final class TimeZoneOffsetProviderTest implements ClassTesting2<TimeZoneO
 
     @Test
     public void testToString() {
-        this.toStringAndCheck(this.createObject(), "[16 May 2020, 10:58:59 pm-16 May 2021, 10:58:59 pm offset=36000000]");
+        this.toStringAndCheck(this.createObject(), "[16 May 2020 12:58:59-16 May 2021 12:58:59 offset=36000000]");
     }
 
     // HashCodeEquality..................................................................................................

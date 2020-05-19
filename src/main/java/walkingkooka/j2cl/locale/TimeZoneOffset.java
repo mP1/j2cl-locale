@@ -124,6 +124,6 @@ public final class TimeZoneOffset {
     }
 
     private static String date(final long ticks) {
-        return new Date(ticks).toLocaleString();
+        return new Date(ticks).toGMTString().replace(" GMT", "");
     }
 }
