@@ -370,17 +370,13 @@ public final class ZoneRulesTest {
 
     private void inDaylightTimeAndCheck(final java.time.ZoneId zoneId,
                                         final LocalDateTime dateTime) throws Exception {
-
-        final java.time.zone.ZoneRules jreRules = zoneId.getRules();
-        final java.time.Instant jreInstant = dateTime.atZone(zoneId).toInstant();
-
-        final boolean inDaylightSavings = jreRules.isDaylightSavings(jreInstant);
+        final ZoneRules emulatedRules = ZoneRules.of(zoneId);
 
         final Date date = java.util.Date
                 .from(dateTime.atZone(zoneId)
                         .toInstant());
-        assertEquals(inDaylightSavings,
-                TimeZone.getTimeZone(zoneId).inDaylightTime(date),
+        assertEquals(TimeZone.getTimeZone(zoneId).inDaylightTime(date),
+                emulatedRules.inDaylightTime(date),
                 () -> zoneId + " inDaylightTime " + dateTime + " vs TimeZone.getTimeZone.inDaylightTime " + date);
     }
 }
