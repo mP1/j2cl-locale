@@ -33,30 +33,26 @@ package walkingkooka.j2cl.locale.org.threeten.bp.zone;
 
 import javaemul.internal.annotations.GwtIncompatible;
 import walkingkooka.j2cl.java.io.string.StringDataInputDataOutput;
-import walkingkooka.j2cl.locale.org.threeten.bp.DayOfWeek;
+import walkingkooka.j2cl.locale.TimeZoneOffsetAndDaylightSavings;
 import walkingkooka.j2cl.locale.org.threeten.bp.Duration;
 import walkingkooka.j2cl.locale.org.threeten.bp.Instant;
 import walkingkooka.j2cl.locale.org.threeten.bp.LocalDate;
 import walkingkooka.j2cl.locale.org.threeten.bp.LocalDateTime;
 import walkingkooka.j2cl.locale.org.threeten.bp.LocalTime;
-import walkingkooka.j2cl.locale.org.threeten.bp.Month;
 import walkingkooka.j2cl.locale.org.threeten.bp.ZoneOffset;
 import walkingkooka.j2cl.locale.org.threeten.bp.jdk8.Jdk8Methods;
-import walkingkooka.j2cl.locale.org.threeten.bp.zone.ZoneOffsetTransitionRule.TimeDefinition;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.time.ZoneId;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * The rules defining how the zone offset varies for a single time-zone.
@@ -81,7 +77,7 @@ import java.util.stream.Collectors;
  * <h3>Specification for implementors</h3>
  * The supplied implementations of this class are immutable and thread-safe.
  */
-public abstract class ZoneRules {
+public abstract class ZoneRules implements TimeZoneOffsetAndDaylightSavings {
 
     @GwtIncompatible
     public static void main(final String[] args) throws Exception {
@@ -664,4 +660,10 @@ public abstract class ZoneRules {
         }
     }
 
+    // implements TimeZoneOffsetAndDaylightSavings...........................................................................................
+
+    @Override
+    public boolean inDaylightTime(final Date time) {
+        return this.isDaylightSavings(Instant.ofEpochMilli(time.getTime()));
+    }
 }
