@@ -281,6 +281,7 @@ final class StandardZoneRules extends ZoneRules implements Serializable {
 
     //-----------------------------------------------------------------------
     @Override
+    @SuppressWarnings("lgtm[java/dereferenced-value-may-be-null]")
     public ZoneOffset getOffset(Instant instant) {
         long epochSec = instant.getEpochSecond();
 

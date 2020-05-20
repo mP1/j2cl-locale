@@ -300,6 +300,7 @@ public final class LocalTime
      * @return the local time, not null
      * @throws DateTimeException if the second-of-day value is invalid
      */
+    @SuppressWarnings("lgtm[java/integer-multiplication-cast-to-long]")
     public static LocalTime ofSecondOfDay(long secondOfDay) {
         SECOND_OF_DAY.checkValidValue(secondOfDay);
         int hours = (int) (secondOfDay / SECONDS_PER_HOUR);
@@ -320,6 +321,7 @@ public final class LocalTime
      * @return the local time, not null
      * @throws DateTimeException if the either input value is invalid
      */
+    @SuppressWarnings("lgtm[java/integer-multiplication-cast-to-long]")
     static LocalTime ofSecondOfDay(long secondOfDay, int nanoOfSecond) {
         SECOND_OF_DAY.checkValidValue(secondOfDay);
         NANO_OF_SECOND.checkValidValue(nanoOfSecond);
