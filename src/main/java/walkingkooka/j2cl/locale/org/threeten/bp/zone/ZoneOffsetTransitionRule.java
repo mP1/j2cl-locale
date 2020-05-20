@@ -263,6 +263,7 @@ public final class ZoneOffsetTransitionRule implements Serializable {
      * @return the created object, not null
      * @throws IOException if an error occurs
      */
+    // @SuppressWarnings("lgtm[java/constant-comparison]")
     static ZoneOffsetTransitionRule readExternal(DataInput in) throws IOException {
         int data = in.readInt();
         Month month = Month.of(data >>> 28);
