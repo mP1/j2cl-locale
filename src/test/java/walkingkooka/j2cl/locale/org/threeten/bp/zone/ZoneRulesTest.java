@@ -379,4 +379,122 @@ public final class ZoneRulesTest {
                 emulatedRules.inDaylightTime(date),
                 () -> zoneId + " inDaylightTime " + dateTime + " vs TimeZone.getTimeZone.inDaylightTime " + date);
     }
+
+    // getOffsetLong........................................................................................................
+
+    @Test
+    public void testGetOffsetLongSydney200001011259() throws Exception {
+        this.getOffsetLongAndCheck(SYDNEY,
+                DATE_2000_JAN_1);
+    }
+
+    @Test
+    public void testGetOffsetLongSydney200007011259() throws Exception {
+        this.getOffsetLongAndCheck(SYDNEY,
+                DATE_2000_JULY_1);
+    }
+
+    @Test
+    public void testGetOffsetLongSydney202001011259() throws Exception {
+        this.getOffsetLongAndCheck(SYDNEY,
+                DATE_2020_JAN_1);
+    }
+
+    @Test
+    public void testGetOffsetLongLondon200001011259() throws Exception {
+        this.getOffsetLongAndCheck(LONDON,
+                DATE_2000_JAN_1);
+    }
+
+    @Test
+    public void testGetOffsetLongLondon200007011259() throws Exception {
+        this.getOffsetLongAndCheck(LONDON,
+                DATE_2000_JULY_1);
+    }
+
+    @Test
+    public void testGetOffsetLongLondon202001011259() throws Exception {
+        this.getOffsetLongAndCheck(LONDON,
+                DATE_2020_JAN_1);
+    }
+
+    @Test
+    public void testGetOffsetLongNewYork200001011259() throws Exception {
+        this.getOffsetLongAndCheck(NYC,
+                DATE_2000_JAN_1);
+    }
+
+    @Test
+    public void testGetOffsetLongNewYork200007011259() throws Exception {
+        this.getOffsetLongAndCheck(NYC,
+                DATE_2000_JULY_1);
+    }
+
+    @Test
+    public void testGetOffsetLongNewYork202001011259() throws Exception {
+        this.getOffsetLongAndCheck(NYC,
+                DATE_2020_JAN_1);
+    }
+
+    @Test
+    public void testGetOffsetLongAllZoneIds200001010959() throws Exception {
+        this.getOffsetLongAndCheck(DATE_2000_JAN_1);
+    }
+
+    @Test
+    public void testGetOffsetLongAllZoneIds200007010959() throws Exception {
+        this.getOffsetLongAndCheck(DATE_2000_JULY_1);
+    }
+
+    @Test
+    public void testGetOffsetLong1950To2000_Jan1() throws Exception {
+        for (int year = 1950; year < 2000; year++) {
+            this.getOffsetLongAndCheck(DATE_2000_JAN_1.withYear(year));
+        }
+    }
+
+    @Test
+    public void testGetOffsetLong1950To2000_July1() throws Exception {
+        for (int year = 1950; year < 2000; year++) {
+            this.getOffsetLongAndCheck(DATE_2000_JULY_1.withYear(year));
+        }
+    }
+
+    private void getOffsetLongAndCheck(final LocalDateTime dateTime) throws Exception {
+        int i = 0;
+        for (final String zoneId : TimeZone.getAvailableIDs()) {
+            System.out.println(zoneId);
+            if (zoneId.contains("/")) {
+                this.getOffsetLongAndCheck(java.time.ZoneId.of(zoneId),
+                        dateTime);
+                i++;
+            }
+        }
+
+        assertTrue(i > 100, "not enough zoneIds " + i);
+    }
+
+    private void getOffsetLongAndCheck(final String zoneId,
+                                           final LocalDateTime dateTime) throws Exception {
+        this.getOffsetLongAndCheck(java.time.ZoneId.of(zoneId),
+                dateTime);
+    }
+
+    private void getOffsetLongAndCheck(final java.time.ZoneId zoneId,
+                                           final LocalDateTime dateTime) throws Exception {
+        final java.time.zone.ZoneRules jreRules = zoneId.getRules();
+        final java.time.ZoneOffset jreZoneOffset = jreRules.getOffset(dateTime);
+
+        final ZoneRules emulatedRules = ZoneRules.of(zoneId);
+
+        //final Date date = new Date(dateTime.toEpochSecond(jreZoneOffset));
+        final Date date = Date.from(dateTime.toInstant(jreZoneOffset));
+
+//        assertEquals(jreZoneOffset.getTotalSeconds() * 1000,
+//                TimeZone.getTimeZone(zoneId).getOffset(date.getTime()),
+//                () -> zoneId + " getOffsetLong " + dateTime + " vs TimeZone.getTimeZone.getOffset " + date);
+        assertEquals(TimeZone.getTimeZone(zoneId).getOffset(date.getTime()),
+                emulatedRules.getOffset(date.getTime()),
+                () -> "TimeZone.getTimeZone.getOffset " + date + " " + zoneId + " getOffsetLong " + dateTime);
+    }
 }
