@@ -666,4 +666,11 @@ public abstract class ZoneRules implements TimeZoneOffsetAndDaylightSavings {
     public boolean inDaylightTime(final Date time) {
         return this.isDaylightSavings(Instant.ofEpochMilli(time.getTime()));
     }
+
+    @Override
+    public final int getOffset(final long time) {
+        final int millisOnly = (int)(time % 1000);
+        return this.getOffset(Instant.ofEpochMilli(time))
+                .getTotalSeconds() * 1000 + millisOnly;
+    }
 }

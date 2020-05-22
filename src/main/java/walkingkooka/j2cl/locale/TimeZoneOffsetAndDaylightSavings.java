@@ -24,6 +24,17 @@ import java.util.Date;
  * like data.
  */
 public interface TimeZoneOffsetAndDaylightSavings {
+
+    /**
+     * Gets the offset from GMT of this {@code TimeZone} for the specified date. The
+     * offset includes daylight savings time if the specified date is within the
+     * daylight savings time period.
+     *
+     * @param time the date in milliseconds since January 1, 1970 00:00:00 GMT
+     * @return the offset from GMT in milliseconds.
+     */
+    int getOffset(final long time);
+
     /**
      * Returns whether the specified {@code Date} is in the daylight savings time period for
      * this {@code TimeZone}.
