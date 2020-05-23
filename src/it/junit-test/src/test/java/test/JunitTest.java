@@ -24,8 +24,6 @@ import walkingkooka.j2cl.locale.Calendar;
 import walkingkooka.j2cl.locale.GregorianCalendar;
 import walkingkooka.j2cl.locale.TimeZoneCalendar;
 import walkingkooka.j2cl.locale.TimeZoneDisplay;
-import walkingkooka.j2cl.locale.TimeZoneOffset;
-import walkingkooka.j2cl.locale.TimeZoneOffsetProvider;
 import walkingkooka.j2cl.locale.WalkingkookaLanguageTag;
 import walkingkooka.j2cl.locale.org.threeten.bp.LocalDate;
 import walkingkooka.j2cl.locale.org.threeten.bp.LocalDateTime;
@@ -78,16 +76,6 @@ public class JunitTest {
         Assert.assertEquals("shortDisplayNameDaylight", "short2day", display.shortDisplayNameDaylight);
         Assert.assertEquals("longDisplayName", "long3", display.longDisplayName);
         Assert.assertEquals("longDisplayNameDaylight", "long4day", display.longDisplayNameDaylight);
-    }
-
-    @Test
-    public void testTimeZoneOffset() throws Exception {
-        Assert.assertNotNull(TimeZoneOffset.with(0, 1, 2));
-    }
-
-    @Test
-    public void testTimeZoneOffsetProvider() throws Exception {
-        Assert.assertNotNull(TimeZoneOffsetProvider.with(0, Lists.of(TimeZoneOffset.with(0, 1, 2))));
     }
 
     @Test

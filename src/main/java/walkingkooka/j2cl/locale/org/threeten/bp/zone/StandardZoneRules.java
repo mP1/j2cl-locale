@@ -217,6 +217,7 @@ final class StandardZoneRules extends ZoneRules implements Serializable {
      * @throws IOException if an error occurs
      */
     @GwtIncompatible
+    public
     void writeExternal(DataOutput out) throws IOException {
         out.writeInt(standardTransitions.length);
         for (long trans : standardTransitions) {

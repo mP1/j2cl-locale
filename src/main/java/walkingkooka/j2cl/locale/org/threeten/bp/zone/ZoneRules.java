@@ -49,6 +49,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.time.ZoneId;
@@ -118,6 +119,10 @@ public abstract class ZoneRules implements TimeZoneOffsetAndDaylightSavings {
             }
         }
     }
+
+    // Introduced to support annotation-processor writing selected zoneId data during build.
+    @GwtIncompatible
+    abstract public void writeExternal(final DataOutput out) throws IOException;
 
     // void writeExternal(DataOutput out) throws IOException {
 
@@ -659,6 +664,12 @@ public abstract class ZoneRules implements TimeZoneOffsetAndDaylightSavings {
         @Override
         public String toString() {
             return "FixedRules:" + offset;
+        }
+
+        @GwtIncompatible
+        @Override
+        public void writeExternal(final DataOutput out) {
+            throw new UnsupportedOperationException();
         }
     }
 
