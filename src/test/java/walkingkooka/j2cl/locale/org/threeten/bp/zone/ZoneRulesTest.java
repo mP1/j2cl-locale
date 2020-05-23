@@ -34,6 +34,7 @@ import java.util.TimeZone;
 import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public final class ZoneRulesTest {
@@ -512,6 +513,51 @@ public final class ZoneRulesTest {
     public void testYearBiasConstant() {
         final String date = new Date(2000 - ZoneRules.YEAR_BIAS, 1, 1).toString();
         assertTrue(date.contains("2000"), date);
+    }
+
+    @Test
+    public void testGetOffsetEraInvalidFails() {
+        this.getOffsetFails(Integer.MAX_VALUE, 1999, 12, 31, 1, 9999);
+    }
+
+    @Test
+    public void testGetOffsetEraBC() {
+        this.getOffsetFails(walkingkooka.j2cl.locale.GregorianCalendar.BC, 1999, 12, 31, 1, 9999);
+    }
+
+    @Test
+    public void testGetOffsetEraAD() {
+        this.getOffsetFails(walkingkooka.j2cl.locale.GregorianCalendar.AD, 1999, 12, 31, 1, 9999);
+    }
+
+    @Test
+    public void testGetOffsetMonthInvalid() {
+        this.getOffsetFails(walkingkooka.j2cl.locale.GregorianCalendar.AD, 1999, -1, 31, 1, 9999);
+    }
+
+    @Test
+    public void testGetOffsetMonthInvalid2() {
+        this.getOffsetFails(walkingkooka.j2cl.locale.GregorianCalendar.AD, 1999, 13, 31, 1, 9999);
+    }
+
+    @Test
+    public void testGetOffsetDayInvalid() {
+        this.getOffsetFails(walkingkooka.j2cl.locale.GregorianCalendar.AD, 1999, 0, -1, 1, 9999);
+    }
+
+    @Test
+    public void testGetOffsetDayInvalid2() {
+        this.getOffsetFails(walkingkooka.j2cl.locale.GregorianCalendar.AD, 1999, 0, 32, 1, 9999);
+    }
+
+    private void getOffsetFails(final int era,
+                                final int year,
+                                final int month,
+                                final int day,
+                                final int dayOfWeek,
+                                final int time) {
+        assertThrows(IllegalArgumentException.class,
+                () -> ZoneRules.of(ZoneId.of("Australia/Sydney")).getOffset(era, year, month, day, dayOfWeek, time));
     }
 
     @Test
