@@ -34,6 +34,8 @@ Click [here](https://github.com/ThreeTen/threetenbp/blob/master/LICENSE.txt) for
 
 
 
+# Maven usage
+
 ## Logging (javac annotation processor argument)
 
 Logging by all related annotation processors may be controlled by the `walkingkooka.j2cl.locale.Logging` annotation. 
@@ -70,7 +72,6 @@ Some examples values include.
 
 
 
-
 ### Maven annotation processor argument
 
 ```xml
@@ -91,7 +92,7 @@ Some examples values include.
 
 
 
-## Related
+# Related
 
 The following list, contains emulated Locale aware classes and the annotation processor.
 
@@ -104,7 +105,7 @@ The following list, contains emulated Locale aware classes and the annotation pr
 
 
 
-## Authoring annotation processors.
+# Authoring annotation processors.
 
 An [abstract AnnotationProcessor](https://github.com/mP1/j2cl-java-util-Locale-annotation-processor/tree/master/src/main/java/walkingkooka/j2cl/java/util/locale/annotationprocessor)
 is available with a few template methods which present the selected locales. It also handles some other housekeeping,
