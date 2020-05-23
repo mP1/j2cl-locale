@@ -472,7 +472,6 @@ public final class ZoneRulesTest {
     private void getOffsetLongAndCheck(final LocalDateTime dateTime) throws Exception {
         int i = 0;
         for (final String zoneId : TimeZone.getAvailableIDs()) {
-            System.out.println(zoneId);
             if (zoneId.contains("/")) {
                 this.getOffsetLongAndCheck(java.time.ZoneId.of(zoneId),
                         dateTime);
