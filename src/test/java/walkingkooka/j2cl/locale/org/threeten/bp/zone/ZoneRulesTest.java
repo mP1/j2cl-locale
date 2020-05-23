@@ -19,11 +19,19 @@ package walkingkooka.j2cl.locale.org.threeten.bp.zone;
 
 import org.junit.jupiter.api.Test;
 import walkingkooka.j2cl.locale.org.threeten.bp.Instant;
+import walkingkooka.text.CharSequences;
 
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
+import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.TimeZone;
+import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -496,5 +504,150 @@ public final class ZoneRulesTest {
         assertEquals(TimeZone.getTimeZone(zoneId).getOffset(date.getTime()),
                 emulatedRules.getOffset(date.getTime()),
                 () -> "TimeZone.getTimeZone.getOffset " + date + " " + zoneId + " getOffsetLong " + dateTime);
+    }
+
+    // getOffset5Int.....................................................................................................
+
+    @Test
+    public void testYearBiasConstant() {
+        final String date = new Date(2000 - ZoneRules.YEAR_BIAS, 1, 1).toString();
+        assertTrue(date.contains("2000"), date);
+    }
+
+    @Test
+    public void testGetOffset5IntSydney202001311920() throws Exception {
+        this.getOffset5IntAndCheck(SYDNEY,
+                2020,
+                Calendar.JANUARY,
+                31,
+                19,
+                20);
+    }
+
+    @Test
+    public void testGetOffset5IntSydney202004151920() throws Exception {
+        this.getOffset5IntAndCheck(SYDNEY,
+                2020,
+                Calendar.MAY,
+                15,
+                19,
+                20);
+    }
+
+    @Test
+    public void testGetOffset5IntSydney19700101() throws Exception {
+        this.getOffset5IntAndCheck(SYDNEY,
+                1970,
+                Calendar.JANUARY,
+                1,
+                0,
+                0);
+    }
+
+    @Test
+    public void testGetOffset5IntSydney19690620() throws Exception {
+        this.getOffset5IntAndCheck(SYDNEY,
+                1969,
+                Calendar.JULY,
+                20,
+                0,
+                0);
+    }
+
+    @Test
+    public void testGetOffset5IntSydney197001011259() throws Exception {
+        this.getOffset5IntAndCheck(SYDNEY,
+                1970,
+                Calendar.JANUARY,
+                1,
+                0,
+                59);
+    }
+
+    @Test
+    public void testGetOffset5Int202004151920() throws Exception {
+        this.getOffset5IntAndCheck(2020,
+                Calendar.MAY,
+                15,
+                19,
+                20);
+    }
+
+    @Test
+    public void testGetOffset5Int19700101() throws Exception {
+        this.getOffset5IntAndCheck(1970,
+                Calendar.JANUARY,
+                1,
+                0,
+                0);
+    }
+
+    @Test
+    public void testGetOffset5Int19690620() throws Exception {
+        this.getOffset5IntAndCheck(1969,
+                Calendar.JULY,
+                20,
+                0,
+                0);
+    }
+
+    private void getOffset5IntAndCheck(final int year,
+                                       final int month,
+                                       final int day,
+                                       final int hours,
+                                       final int minutes) throws Exception {
+        for (final String zoneId : TimeZone.getAvailableIDs()) {
+            if (zoneId.contains("/")) { // skips 3 letter time-zone IDS
+                getOffset5IntAndCheck(zoneId,
+                        year,
+                        month,
+                        day,
+                        hours,
+                        minutes);
+            }
+        }
+    }
+
+    private void getOffset5IntAndCheck(final String timeZoneId,
+                                       final int year,
+                                       final int month,
+                                       final int day,
+                                       final int hours,
+                                       final int minutes) throws Exception {
+        final int era = GregorianCalendar.AD;
+        final TimeZone timeZone = TimeZone.getTimeZone(timeZoneId);
+
+        final int dayOfWeek = LocalDate.of(year, 1 + month, day).getDayOfWeek().getValue();
+        final int millis = LocalTime.of(hours, minutes).toSecondOfDay() * 1000;
+
+        final long jreRawOffset = timeZone.getRawOffset();
+        final ZoneRules emulatedRules = ZoneRules.of(ZoneId.of(timeZoneId));
+
+        {
+            final long jreOffset = timeZone.getOffset(era,
+                    year,
+                    month,
+                    day,
+                    dayOfWeek,
+                    millis);
+            final long emulatedOffset = emulatedRules.getOffset(era,
+                    year,
+                    month,
+                    day,
+                    dayOfWeek,
+                    millis);
+
+            final Supplier<String> message = () -> CharSequences.quoteAndEscape(timeZoneId) +
+                    ", getOffset5Int: " + year + "/" + month + "/" + day + " " + hours + ":" + minutes +
+                    ", jreRawOffset: " + duration(jreRawOffset).toString().substring(2);
+
+            assertEquals(duration(jreOffset),
+                    duration(emulatedOffset),
+                    message);
+        }
+    }
+
+    private static Duration duration(final long millis) {
+        return Duration.ofMillis(millis);
     }
 }
