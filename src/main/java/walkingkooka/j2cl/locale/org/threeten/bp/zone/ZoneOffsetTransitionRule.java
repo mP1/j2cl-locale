@@ -263,7 +263,7 @@ public final class ZoneOffsetTransitionRule implements Serializable {
      * @return the created object, not null
      * @throws IOException if an error occurs
      */
-    // @SuppressWarnings("lgtm[java/constant-comparison]")
+    @SuppressWarnings("lgtm[java/constant-comparison]")
     static ZoneOffsetTransitionRule readExternal(DataInput in) throws IOException {
         int data = in.readInt();
         Month month = Month.of(data >>> 28);
@@ -478,6 +478,7 @@ public final class ZoneOffsetTransitionRule implements Serializable {
      * @return a string for debugging, not null
      */
     @Override
+    @SuppressWarnings("lgtm[java/integer-multiplication-cast-to-long]")
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append("TransitionRule[")
