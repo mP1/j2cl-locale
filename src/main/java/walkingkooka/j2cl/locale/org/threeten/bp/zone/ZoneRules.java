@@ -100,7 +100,6 @@ public abstract class ZoneRules implements TimeZoneOffsetAndDaylightSavings {
     public static ZoneRules of(final java.time.ZoneId zoneId) throws Exception {
         final java.time.zone.ZoneRules rules = zoneId.getRules();
 
-        final StringBuilder data = new StringBuilder();
         try (final ByteArrayOutputStream bytesOut = new ByteArrayOutputStream()) {
             try (final DataOutputStream dataOut = new DataOutputStream(bytesOut)) {
                 final Method writeExternal = rules.getClass().getDeclaredMethod("writeExternal", DataOutput.class); // assumes a single ZoneRule class
