@@ -29,6 +29,7 @@ Changes include:
 - Most methods not required have not been deleted but have been commented out with slash slash comments. This results in value types such as `LocalDateTime` losing nearly all their beautiful conversion, math etc methods.
 - A few methods have been made public to assist [j2cl-java-util-TimeZone-annotation-processor](https://travis-ci.com/mP1/j2cl-java-util-TimeZone-annotation-processor) & [j2cl-java-util-TimeZone](https://travis-ci.com/mP1/j2cl-java-util-TimeZone)
 - The inbuilt serialization support for all classes packaged here, has been kept but marked `@GwtIncompatible` and used to create the data used by the emulated `java.util.TimeZone`.
+- Note the fork of threeten does not include the accompanying tests, which of course lowers the code coverage of this project significantly.
 
 Click [here](https://github.com/ThreeTen/threetenbp/blob/master/LICENSE.txt) for the official threeten license. 
 
