@@ -33,6 +33,8 @@ package walkingkooka.j2cl.locale.org.threeten.bp.zone;
 
 import javaemul.internal.annotations.GwtIncompatible;
 import walkingkooka.j2cl.java.io.string.StringDataInputDataOutput;
+import walkingkooka.j2cl.locale.Calendar;
+import walkingkooka.j2cl.locale.GregorianCalendar;
 import walkingkooka.j2cl.locale.TimeZoneOffsetAndDaylightSavings;
 import walkingkooka.j2cl.locale.org.threeten.bp.Duration;
 import walkingkooka.j2cl.locale.org.threeten.bp.Instant;
@@ -666,6 +668,46 @@ public abstract class ZoneRules implements TimeZoneOffsetAndDaylightSavings {
     public boolean inDaylightTime(final Date time) {
         return this.isDaylightSavings(Instant.ofEpochMilli(time.getTime()));
     }
+
+    /**
+     * Gets the offset from GMT of this {@code TimeZone} for the specified date and
+     * time. The offset includes daylight savings time if the specified date and
+     * time are within the daylight savings time period.
+     *
+     * @param era       the {@code GregorianCalendar} era, either {@code GregorianCalendar.BC} or
+     *                  {@code GregorianCalendar.AD}.
+     * @param year      the year.
+     * @param month     the {@code Calendar} month.
+     * @param day       the day of the month.
+     * @param dayOfWeek the {@code Calendar} day of the week.
+     * @param time      the time of day in milliseconds.
+     * @return the offset from GMT in milliseconds.
+     */
+    @Override
+    public int getOffset(final int era,
+                         final int year,
+                         final int month,
+                         final int day,
+                         final int dayOfWeek,
+                         final int time) {
+        if (GregorianCalendar.AD != era) {
+            throw new IllegalArgumentException("Invalid era " + era + " only AD supported"); // TODO add BC support.
+        }
+        if (dayOfWeek < GregorianCalendar.SUNDAY || dayOfWeek > GregorianCalendar.SATURDAY) {
+            throw new IllegalArgumentException();
+        }
+
+        final LocalTime localTime = LocalTime.ofNanoOfDay(time/ 1000);
+
+        return this.getOffset(Instant.ofEpochMilli(new Date(year - YEAR_BIAS,
+                month,
+                day,
+                localTime.getHour(),
+                localTime.getMinute())
+                .getTime())).getTotalSeconds() * 1000;
+    }
+
+    final static int YEAR_BIAS = 1900;
 
     @Override
     public final int getOffset(final long time) {

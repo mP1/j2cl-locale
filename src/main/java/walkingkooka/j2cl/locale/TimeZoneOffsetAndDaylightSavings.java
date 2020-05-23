@@ -26,6 +26,27 @@ import java.util.Date;
 public interface TimeZoneOffsetAndDaylightSavings {
 
     /**
+     * Gets the offset from GMT of this {@code TimeZone} for the specified date and
+     * time. The offset includes daylight savings time if the specified date and
+     * time are within the daylight savings time period.
+     *
+     * @param era       the {@code GregorianCalendar} era, either {@code GregorianCalendar.BC} or
+     *                  {@code GregorianCalendar.AD}.
+     * @param year      the year.
+     * @param month     the {@code Calendar} month.
+     * @param day       the day of the month.
+     * @param dayOfWeek the {@code Calendar} day of the week.
+     * @param time      the time of day in milliseconds.
+     * @return the offset from GMT in milliseconds.
+     */
+    int getOffset(int era,
+                  int year,
+                  int month,
+                  int day,
+                  int dayOfWeek,
+                  int time);
+
+    /**
      * Gets the offset from GMT of this {@code TimeZone} for the specified date. The
      * offset includes daylight savings time if the specified date is within the
      * daylight savings time period.
