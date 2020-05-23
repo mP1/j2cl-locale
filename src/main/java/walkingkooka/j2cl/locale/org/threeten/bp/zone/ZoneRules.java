@@ -693,8 +693,10 @@ public abstract class ZoneRules implements TimeZoneOffsetAndDaylightSavings {
         if (GregorianCalendar.AD != era) {
             throw new IllegalArgumentException("Invalid era " + era + " only AD supported"); // TODO add BC support.
         }
-        if (dayOfWeek < GregorianCalendar.SUNDAY || dayOfWeek > GregorianCalendar.SATURDAY) {
-            throw new IllegalArgumentException();
+        // checkRange/checkDay/isLeapYear copied from ApacheHarmony's java.util.TimeZone.getOffset(int,int,int,int,int,int);
+        checkRange(month, dayOfWeek, time);
+        if (month != Calendar.FEBRUARY || day != 29 || !isLeapYear(year)) {
+            checkDay(month, day);
         }
 
         final LocalTime localTime = LocalTime.ofNanoOfDay(time/ 1000);
@@ -705,6 +707,36 @@ public abstract class ZoneRules implements TimeZoneOffsetAndDaylightSavings {
                 localTime.getHour(),
                 localTime.getMinute())
                 .getTime())).getTotalSeconds() * 1000;
+    }
+
+    private void checkRange(int month, int dayOfWeek, int time) {
+        if (month < Calendar.JANUARY || month > Calendar.DECEMBER) {
+            //throw new IllegalArgumentException(Messages.getString("luni.3D", month)); //$NON-NLS-1$
+            throw new IllegalArgumentException("Invalid month: " + month); //$NON-NLS-1$
+        }
+        if (dayOfWeek < Calendar.SUNDAY || dayOfWeek > Calendar.SATURDAY) {
+//            throw new IllegalArgumentException(Messages
+//                    .getString("luni.48", dayOfWeek)); //$NON-NLS-1$
+            throw new IllegalArgumentException("Invalid dayOfWeek: " + dayOfWeek);
+        }
+        if (time < 0 || time >= 24 * 3600000) {
+//            throw new IllegalArgumentException(Messages.getString("luni.3E", time)); //$NON-NLS-1$
+            throw new IllegalArgumentException("Invalid time " + time);
+        }
+    }
+
+    private void checkDay(int month, int day) {
+        if (day <= 0 || day > GregorianCalendar.DaysInMonth[month]) {
+            //throw new IllegalArgumentException(Messages.getString("luni.3F", day)); //$NON-NLS-1$
+            throw new IllegalArgumentException("Invalid day " + day + " must be between 0 and " + GregorianCalendar.DaysInMonth[month]); //$NON-NLS-1$
+        }
+    }
+
+    private boolean isLeapYear(int year) {
+        if (year > 1582) {
+            return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
+        }
+        return year % 4 == 0;
     }
 
     final static int YEAR_BIAS = 1900;
