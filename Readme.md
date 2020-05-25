@@ -93,9 +93,11 @@ Some examples values include.
 
 
 
-# Related
+# Related annotation processors
 
-The following list, contains emulated Locale aware classes and the annotation processor.
+The following list, contains emulated `java.util.Locale` aware classes and their corresponding annotation processor.
+All within the list sub class `walkingkooka.j2cl.locale.annotationprocessor.LocaleAwareAnnotationProcessor` and use other
+support classes within this project.
 
 - [Currency](https://github.com/mP1/j2cl-java-util-Currency) supporting [annotation processor](https://github.com/mP1/j2cl-java-util-currency-annotation-processsor)
 - [DateFormatSymbols](https://github.com/mP1/j2cl-java-text) supporting [annotation processor](https://github.com/mP1/j2cl-java-text-annotation-processor/blob/master/src/main/java/walkingkooka/j2cl/java/text/annotationprocessor/DateFormatSymbolsProviderAnnotationProcessor.java)
@@ -108,7 +110,7 @@ The following list, contains emulated Locale aware classes and the annotation pr
 
 # Authoring annotation processors.
 
-An [abstract AnnotationProcessor](https://github.com/mP1/j2cl-java-util-Locale-annotation-processor/tree/master/src/main/java/walkingkooka/j2cl/java/util/locale/annotationprocessor)
+An abstract [AnnotationProcessor](https://github.com/mP1/j2cl-locale/blob/master/src/main/java/walkingkooka/j2cl/locale/annotationprocessor/LocaleAwareAnnotationProcessor.java)
 is available with a few template methods which present the selected locales. It also handles some other housekeeping,
 relating to the annotation processor lifecycle.
 
