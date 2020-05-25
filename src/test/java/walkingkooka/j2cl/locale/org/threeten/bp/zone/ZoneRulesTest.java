@@ -40,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public final class ZoneRulesTest {
 
     private final static String SYDNEY = "Australia/Sydney";
+    private final static String PERTH = "Australia/Perth";
     private final static String LONDON = "Europe/London";
     private final static String NYC = "America/New_York";
     static final LocalDateTime DATE_2000_JAN_1 = LocalDateTime.of(2000, Month.JANUARY, 1, 0, 59);
@@ -696,6 +697,43 @@ public final class ZoneRulesTest {
         return Duration.ofMillis(millis);
     }
 
+    // TimeZone.observesDaylightTime.........................................................................................
+
+    @Test
+    public void testObservesDaylightTimeAustraliaSydney() throws Exception {
+        this.observesDaylightTimeAndCheck(SYDNEY);
+    }
+
+    @Test
+    public void testObservesDaylightTimeAustraliaPerth() throws Exception {
+        this.observesDaylightTimeAndCheck(PERTH);
+    }
+
+    @Test
+    public void testObservesDaylightTimeEuropeLondon() throws Exception {
+        this.observesDaylightTimeAndCheck(LONDON);
+    }
+
+    @Test
+    public void testObservesDaylightTimeAmericaNYC() throws Exception {
+        this.observesDaylightTimeAndCheck(NYC);
+    }
+
+    @Test
+    public void testObservesDaylightTimeAllTimezons() throws Exception {
+        for (final String zoneId : TimeZone.getAvailableIDs()) {
+            if (isSupportedTimeZoneId(zoneId)) {
+                this.observesDaylightTimeAndCheck(zoneId);
+            }
+        }
+    }
+
+    private void observesDaylightTimeAndCheck(final String zoneId) throws Exception {
+        assertEquals(TimeZone.getTimeZone(zoneId).observesDaylightTime(),
+                ZoneRules.of(ZoneId.of(zoneId)).observesDaylightTime(),
+                () -> "observesDaylightTime for zoneId " + CharSequences.quoteAndEscape(zoneId));
+    }
+
     // TimeZone.useDaylightTime.........................................................................................
 
     @Test
@@ -705,7 +743,7 @@ public final class ZoneRulesTest {
 
     @Test
     public void testUseDaylightTimeAustraliaPerth() throws Exception {
-        this.useDaylightTimeAndCheck("Australia/Perth");
+        this.useDaylightTimeAndCheck(PERTH);
     }
 
     @Test

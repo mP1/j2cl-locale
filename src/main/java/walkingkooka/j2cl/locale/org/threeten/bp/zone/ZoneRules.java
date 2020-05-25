@@ -759,6 +759,14 @@ public abstract class ZoneRules implements TimeZoneOffsetAndDaylightSavings {
     }
 
     /**
+     * <a href="https://docs.oracle.com/javase/7/docs/api/java/util/TimeZone.html#observesDaylightTime()"></a>
+     */
+    @Override
+    public boolean observesDaylightTime() {
+        return this.useDaylightTime() || this.inDaylightTime(new Date());
+    }
+
+    /**
      * Returns whether this {@code TimeZone} has a daylight savings time period.
      *
      * @return {@code true} if this {@code TimeZone} has a daylight savings time period, {@code false}
