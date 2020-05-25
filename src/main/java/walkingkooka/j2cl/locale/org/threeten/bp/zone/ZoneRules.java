@@ -757,4 +757,36 @@ public abstract class ZoneRules implements TimeZoneOffsetAndDaylightSavings {
         return this.getOffset(Instant.ofEpochMilli(time))
                 .getTotalSeconds() * 1000 + millisOnly;
     }
+
+    /**
+     * Returns whether this {@code TimeZone} has a daylight savings time period.
+     *
+     * @return {@code true} if this {@code TimeZone} has a daylight savings time period, {@code false}
+     * otherwise.
+     */
+    @Override
+    public boolean useDaylightTime() {
+        return /*this.useDaylightTimeTransition() ||*/
+                this.useDaylightTimeTransitionRules();
+    }
+
+    private boolean useDaylightTimeTransition() {
+        return this.getTransitions()
+                .stream()
+                .anyMatch(this::useDaylightTimeTransition0);
+    }
+
+    /**
+     * If the transition is a gap or transition it is probably a daylight saving transition.
+     */
+    private boolean useDaylightTimeTransition0(final ZoneOffsetTransition transition) {
+        return transition.isGap() || transition.isOverlap();
+    }
+
+    /**
+     * If any rules exist daylight savings must be happening.
+     */
+    private boolean useDaylightTimeTransitionRules() {
+        return this.getTransitionRules().size() >= 2;
+    }
 }

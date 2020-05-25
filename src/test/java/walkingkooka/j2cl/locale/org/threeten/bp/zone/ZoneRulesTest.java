@@ -642,7 +642,7 @@ public final class ZoneRulesTest {
                                        final int hours,
                                        final int minutes) throws Exception {
         for (final String zoneId : TimeZone.getAvailableIDs()) {
-            if (zoneId.contains("/")) { // skips 3 letter time-zone IDS
+            if (isSupportedTimeZoneId(zoneId)) {
                 getOffset5IntAndCheck(zoneId,
                         year,
                         month,
@@ -694,5 +694,46 @@ public final class ZoneRulesTest {
 
     private static Duration duration(final long millis) {
         return Duration.ofMillis(millis);
+    }
+
+    // TimeZone.useDaylightTime.........................................................................................
+
+    @Test
+    public void testUseDaylightTimeAustraliaSydney() throws Exception {
+        this.useDaylightTimeAndCheck(SYDNEY);
+    }
+
+    @Test
+    public void testUseDaylightTimeAustraliaPerth() throws Exception {
+        this.useDaylightTimeAndCheck("Australia/Perth");
+    }
+
+    @Test
+    public void testUseDaylightTimeEuropeLondon() throws Exception {
+        this.useDaylightTimeAndCheck(LONDON);
+    }
+
+    @Test
+    public void testUseDaylightTimeAmericaNYC() throws Exception {
+        this.useDaylightTimeAndCheck(NYC);
+    }
+
+    @Test
+    public void testUseDaylightTimeAllTimezons() throws Exception {
+        for (final String zoneId : TimeZone.getAvailableIDs()) {
+            if (isSupportedTimeZoneId(zoneId)) {
+                this.useDaylightTimeAndCheck(zoneId);
+            }
+        }
+    }
+
+    private void useDaylightTimeAndCheck(final String zoneId) throws Exception {
+        assertEquals(TimeZone.getTimeZone(zoneId).useDaylightTime(),
+                ZoneRules.of(ZoneId.of(zoneId)).useDaylightTime(),
+                () -> "useDaylightTime for zoneId " + CharSequences.quoteAndEscape(zoneId));
+    }
+
+    private static boolean isSupportedTimeZoneId(final String zoneId) {
+        return zoneId.contains("/"); // skip three letter non standard timezone ids
     }
 }
