@@ -18,7 +18,6 @@ package test;
 import com.google.j2cl.junit.apt.J2clTestInput;
 import org.junit.Assert;
 import org.junit.Test;
-import walkingkooka.collect.list.Lists;
 import walkingkooka.j2cl.java.io.string.StringDataInputDataOutput;
 import walkingkooka.j2cl.locale.Calendar;
 import walkingkooka.j2cl.locale.GregorianCalendar;
@@ -138,6 +137,12 @@ public class JunitTest {
                         day,
                         Calendar.MONDAY,
                         hours * 60 * 60 * 1000 + minutes * 60 * 1000));
+    }
+
+    @Test
+    public void testZoneRulesUseDaylightTime() throws Exception {
+        Assert.assertEquals(true,
+                this.standardZoneRules().useDaylightTime());
     }
 
     private StandardZoneRules standardZoneRules() throws Exception {

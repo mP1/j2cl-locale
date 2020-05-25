@@ -65,4 +65,12 @@ public interface TimeZoneOffsetAndDaylightSavings {
      * otherwise.
      */
     boolean inDaylightTime(Date time);
+
+    /**
+     * Returns whether this {@code TimeZone} has a daylight savings time period.
+     *
+     * @return {@code true} if this {@code TimeZone} has a daylight savings time period, {@code false}
+     *         otherwise.
+     */
+    boolean useDaylightTime();
 }
