@@ -140,6 +140,12 @@ public class JunitTest {
     }
 
     @Test
+    public void testZoneRulesObservesDaylightTime() throws Exception {
+        Assert.assertEquals(true,
+                this.standardZoneRules().observesDaylightTime());
+    }
+
+    @Test
     public void testZoneRulesUseDaylightTime() throws Exception {
         Assert.assertEquals(true,
                 this.standardZoneRules().useDaylightTime());

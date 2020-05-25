@@ -66,6 +66,8 @@ public interface TimeZoneOffsetAndDaylightSavings {
      */
     boolean inDaylightTime(Date time);
 
+    boolean observesDaylightTime();
+
     /**
      * Returns whether this {@code TimeZone} has a daylight savings time period.
      *
