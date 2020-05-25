@@ -766,21 +766,7 @@ public abstract class ZoneRules implements TimeZoneOffsetAndDaylightSavings {
      */
     @Override
     public boolean useDaylightTime() {
-        return /*this.useDaylightTimeTransition() ||*/
-                this.useDaylightTimeTransitionRules();
-    }
-
-    private boolean useDaylightTimeTransition() {
-        return this.getTransitions()
-                .stream()
-                .anyMatch(this::useDaylightTimeTransition0);
-    }
-
-    /**
-     * If the transition is a gap or transition it is probably a daylight saving transition.
-     */
-    private boolean useDaylightTimeTransition0(final ZoneOffsetTransition transition) {
-        return transition.isGap() || transition.isOverlap();
+        return this.useDaylightTimeTransitionRules();
     }
 
     /**
