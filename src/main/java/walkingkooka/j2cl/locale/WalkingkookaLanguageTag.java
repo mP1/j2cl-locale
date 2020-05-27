@@ -21,7 +21,6 @@ import javaemul.internal.annotations.GwtIncompatible;
 import walkingkooka.NeverError;
 import walkingkooka.collect.list.Lists;
 import walkingkooka.collect.set.Sets;
-import walkingkooka.j2cl.locale.annotationprocessor.LocaleAwareAnnotationProcessor;
 import walkingkooka.j2cl.locale.annotationprocessor.LocaleAwareAnnotationProcessorTool;
 import walkingkooka.predicate.Predicates;
 import walkingkooka.text.CaseSensitivity;
@@ -37,7 +36,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Represents a single language tag parsed into components. This class should not be referenced in code and is intended
