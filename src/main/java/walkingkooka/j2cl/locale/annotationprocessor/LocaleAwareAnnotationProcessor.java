@@ -39,8 +39,10 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
+import javax.tools.Diagnostic.Kind;
 import javax.tools.StandardLocation;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,6 +54,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * An {@link AbstractProcessor} that has several (abstract) template method that probably generate a provider from
@@ -135,15 +138,20 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
                             .collect(Collectors.joining(",")))
                             .toString());
 
-            final StringBuilder data = new StringBuilder();
+            final String data;
             final StringBuilder comments = new StringBuilder();
 
             try (final IndentingPrinter printer = logging.loggingDestination(comments, this)) {
-                this.generate(selectedLocales,
+                final StringBuilder dataStringBuilder = new StringBuilder();
+                final String summary = this.generate(localeFilter,
+                        selectedLocales,
                         this.arguments::get,
-                        StringDataInputDataOutput.output(data::append),
+                        StringDataInputDataOutput.output(dataStringBuilder::append),
                         printer);
                 printer.flush();
+
+                data = dataStringBuilder.toString();
+                this.printSummary(summary + ", " + rawAndCompressedSize(data));
             }
 
             final String merged3 = logging.replaceTemplatePlaceholder(merged2, comments);
@@ -183,7 +191,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
         printer.print("// " + line + lineEnding);
     }
 
-    static CharSequence stringDeclaration(final CharSequence data, final int max) {
+    static CharSequence stringDeclaration(final String data, final int max) {
         return data.length() < max ?
                 CharSequences.quoteAndEscape(data) :
                 stringBuilderSplit(CharSequences.escape(data).toString(), max);
@@ -237,6 +245,35 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
             throw new IllegalStateException("Unable to find " + CharSequences.quoteAndEscape(placeholder) + " in " + CharSequences.quoteAndEscape(template));
         }
         return after;
+    }
+
+    /**
+     * Takes the data string and returns a message such as
+     * <pre>
+     * data: 123 char(s), utf-8: 200 byte(s), gzipped 89 byte(s)
+     * </pre>
+     */
+    private static String rawAndCompressedSize(final String data) throws IOException {
+        final byte[] utf = data.getBytes(Charset.defaultCharset());
+
+        try (final ByteArrayOutputStream bytes = new ByteArrayOutputStream()) {
+            try (final GZIPOutputStream gzip = new GZIPOutputStream(bytes)) {
+                gzip.write(utf);
+                gzip.flush();
+            }
+            bytes.flush();
+
+            return "data: " + data.length() + " char(s), utf-8: " + utf.length + " byte(s), gzipped " + bytes.toByteArray().length + " byte(s)";
+        }
+    }
+
+    /**
+     * Used to print a summary of the extracted locales and possibly other stuff like currencies, and details about the
+     * extracted data such as its size both raw and compressed.
+     */
+    private void printSummary(final String message) {
+        this.messager.printMessage(Kind.NOTE, // maven will show this as INFO
+                this.getClass().getSimpleName() + " generated " + this.generatedClassName() + ".java, " + message);
     }
 
     // locale filter....................................................................................................
@@ -309,11 +346,13 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
     /**
      * This method is invoked with one or more language tags and should return something like a field or method that will appear in the template.
+     * It should return a summary that includes the items extracted.
      */
-    protected abstract void generate(final Set<String> languageTags,
-                                     final Function<String, String> parameters,
-                                     final DataOutput data,
-                                     final IndentingPrinter comments) throws Exception;
+    protected abstract String generate(final String localeFilter,
+                                       final Set<String> languageTags,
+                                       final Function<String, String> parameters,
+                                       final DataOutput data,
+                                       final IndentingPrinter comments) throws Exception;
 
     // template.........................................................................................................
 
