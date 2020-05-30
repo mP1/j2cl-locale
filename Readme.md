@@ -87,9 +87,24 @@ Some examples values include.
             <arg>-Awalkingkooka.j2cl.java.util.Locale=EN-*</arg>
             <arg>-Awalkingkooka.j2cl.locale.Logging=TXT_FILE</arg>
         </compilerArgs>
+        <showWarnings>true</showWarnings>
     </configuration>
 </plugin>
 ```
+
+The `ShowWarning` parameter is necessary as all annotation processor sub classes (shown below) print their parameters and
+the size of the `DATA` that holds their data encoded in `String` form.
+
+Selecting many locales will result in the size of the `DATA` field being many times larger. This is particularly important
+as something such as `java.time` actually uses internally data for many classes:
+
+- `java.text.DateFormatSymbols`
+- `java.text.DateFormat`
+- `java.text.DecimalFormatSymbols`
+- `java.text.DecimalFormat`
+- `java.util.Locale`
+- `java.text.Currency`
+- `java.util.TimeZone`
 
 
 
