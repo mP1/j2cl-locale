@@ -20,6 +20,7 @@ package walkingkooka.j2cl.locale.annotationprocessor;
 import walkingkooka.collect.map.Maps;
 import walkingkooka.collect.set.Sets;
 import walkingkooka.reflect.PublicStaticHelper;
+import walkingkooka.text.CharSequences;
 
 import java.util.Comparator;
 import java.util.Locale;
@@ -95,6 +96,18 @@ public final class LocaleAwareAnnotationProcessorTool implements PublicStaticHel
         }
 
         return most;
+    }
+
+    /**
+     * Produces a message such as:
+     * <pre>
+     * 56 locale(s) selected by "EN-*"
+     * </pre>
+     */
+    public static String extractSummary(final int count,
+                                        final String label,
+                                        final String filter) {
+        return count + " " + label + "(s) selected by " + CharSequences.quoteAndEscape(filter);
     }
 
     /**
