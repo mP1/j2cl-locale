@@ -333,7 +333,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     private Logging reportLoggingAnnotationProcessorArgumentFail(final String message) {
         throw new IllegalStateException(message + " " +
                 CharSequences.quote(LOGGING_ANNOTATION_PROCESSOR_OPTION) + "=" + CharSequences.quoteIfChars(logging) +
-                ", expected one of " + Arrays.stream(Logging.values()).map(Logging::name).collect(Collectors.joining(", ")));
+                ", expected one of " + Arrays.stream(Logging.values()).map(Logging::name).collect(Collectors.joining(", ")) + " (https://github.com/mP1/j2cl-locale#logging-javac-annotation-processor-argument)");
     }
 
     private String logging;
