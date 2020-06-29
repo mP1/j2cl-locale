@@ -300,7 +300,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     private String localeFilter() {
         final String localeFilter = this.localeFilter;
         if (null == localeFilter) {
-            throw new IllegalStateException("Missing annotation processor argument " + CharSequences.quote(LOCALE_ANNOTATION_PROCESSOR_OPTION) + " with csv list of selected Locale(s) https://github.com/mP1/j2cl-locale");
+            throw new IllegalStateException("Missing annotation processor argument " + CharSequences.quote(LOCALE_ANNOTATION_PROCESSOR_OPTION) + " with csv list of selected Locale(s) (https://github.com/mP1/j2cl-locale#locale-selection-javac-annotation-processor-argument");
         }
         return localeFilter;
     }
