@@ -59,16 +59,16 @@ public final class LocalDate
         /*extends ChronoLocalDate
         implements Temporal, TemporalAdjuster, Serializable*/ {
 
-    /**
-     * The minimum supported {@code LocalDate}, '-999999999-01-01'.
-     * This could be used by an application as a "far past" date.
-     */
-    public static final LocalDate MIN = LocalDate.of(Year.MIN_VALUE, 1, 1);
-    /**
-     * The maximum supported {@code LocalDate}, '+999999999-12-31'.
-     * This could be used by an application as a "far future" date.
-     */
-    public static final LocalDate MAX = LocalDate.of(Year.MAX_VALUE, 12, 31);
+//    /**
+//     * The minimum supported {@code LocalDate}, '-999999999-01-01'.
+//     * This could be used by an application as a "far past" date.
+//     */
+//    public static final LocalDate MIN = LocalDate.of(Year.MIN_VALUE, 1, 1);
+//    /**
+//     * The maximum supported {@code LocalDate}, '+999999999-12-31'.
+//     * This could be used by an application as a "far future" date.
+//     */
+//    public static final LocalDate MAX = LocalDate.of(Year.MAX_VALUE, 12, 31);
 //    /**
 //     * Simulate JDK 8 method reference LocalDate::from.
 //     */

@@ -144,28 +144,28 @@ public final class Instant
      * The maximum supported epoch second.
      */
     private static final long MAX_SECOND = 31556889864403199L;
-    /**
-     * The minimum supported {@code Instant}, '-1000000000-01-01T00:00Z'.
-     * This could be used by an application as a "far past" instant.
-     * <p>
-     * This is one year earlier than the minimum {@code LocalDateTime}.
-     * This provides sufficient values to handle the range of {@code ZoneOffset}
-     * which affect the instant in addition to the local date-time.
-     * The value is also chosen such that the value of the year fits in
-     * an {@code int}.
-     */
-    public static final Instant MIN = Instant.ofEpochSecond(MIN_SECOND, 0);
-    /**
-     * The maximum supported {@code Instant}, '1000000000-12-31T23:59:59.999999999Z'.
-     * This could be used by an application as a "far future" instant.
-     * <p>
-     * This is one year later than the maximum {@code LocalDateTime}.
-     * This provides sufficient values to handle the range of {@code ZoneOffset}
-     * which affect the instant in addition to the local date-time.
-     * The value is also chosen such that the value of the year fits in
-     * an {@code int}.
-     */
-    public static final Instant MAX = Instant.ofEpochSecond(MAX_SECOND, 999999999);
+//    /**
+//     * The minimum supported {@code Instant}, '-1000000000-01-01T00:00Z'.
+//     * This could be used by an application as a "far past" instant.
+//     * <p>
+//     * This is one year earlier than the minimum {@code LocalDateTime}.
+//     * This provides sufficient values to handle the range of {@code ZoneOffset}
+//     * which affect the instant in addition to the local date-time.
+//     * The value is also chosen such that the value of the year fits in
+//     * an {@code int}.
+//     */
+//    public static final Instant MIN = Instant.ofEpochSecond(MIN_SECOND, 0);
+//    /**
+//     * The maximum supported {@code Instant}, '1000000000-12-31T23:59:59.999999999Z'.
+//     * This could be used by an application as a "far future" instant.
+//     * <p>
+//     * This is one year later than the maximum {@code LocalDateTime}.
+//     * This provides sufficient values to handle the range of {@code ZoneOffset}
+//     * which affect the instant in addition to the local date-time.
+//     * The value is also chosen such that the value of the year fits in
+//     * an {@code int}.
+//     */
+//    public static final Instant MAX = Instant.ofEpochSecond(MAX_SECOND, 999999999);
 //    /**
 //     * Simulate JDK 8 method reference Instant::from.
 //     */
