@@ -82,10 +82,10 @@ public final class Duration
      * Constant for nanos per second.
      */
     private static final int NANOS_PER_SECOND = 1000000000;
-    /**
-     * Constant for nanos per milli.
-     */
-    private static final int NANOS_PER_MILLI = 1000000;
+//    /**
+//     * Constant for nanos per milli.
+//     */
+//    private static final int NANOS_PER_MILLI = 1000000;
 //    /**
 //     * Constant for nanos per second.
 //     */

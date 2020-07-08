@@ -65,20 +65,20 @@ public final class LocalDateTime
         implements Temporal, TemporalAdjuster, Serializable*/
         implements Comparable<LocalDateTime> {
 
-    /**
-     * The minimum supported {@code LocalDateTime}, '-999999999-01-01T00:00:00'.
-     * This is the local date-time of midnight at the start of the minimum date.
-     * This combines {@link LocalDate#MIN} and {@link LocalTime#MIN}.
-     * This could be used by an application as a "far past" date-time.
-     */
-    public static final LocalDateTime MIN = LocalDateTime.of(LocalDate.MIN, LocalTime.MIN);
-    /**
-     * The maximum supported {@code LocalDateTime}, '+999999999-12-31T23:59:59.999999999'.
-     * This is the local date-time just before midnight at the end of the maximum date.
-     * This combines {@link LocalDate#MAX} and {@link LocalTime#MAX}.
-     * This could be used by an application as a "far future" date-time.
-     */
-    public static final LocalDateTime MAX = LocalDateTime.of(LocalDate.MAX, LocalTime.MAX);
+//    /**
+//     * The minimum supported {@code LocalDateTime}, '-999999999-01-01T00:00:00'.
+//     * This is the local date-time of midnight at the start of the minimum date.
+//     * This combines {@link LocalDate#MIN} and {@link LocalTime#MIN}.
+//     * This could be used by an application as a "far past" date-time.
+//     */
+//    public static final LocalDateTime MIN = LocalDateTime.of(LocalDate.MIN, LocalTime.MIN);
+//    /**
+//     * The maximum supported {@code LocalDateTime}, '+999999999-12-31T23:59:59.999999999'.
+//     * This is the local date-time just before midnight at the end of the maximum date.
+//     * This combines {@link LocalDate#MAX} and {@link LocalTime#MAX}.
+//     * This could be used by an application as a "far future" date-time.
+//     */
+//    public static final LocalDateTime MAX = LocalDateTime.of(LocalDate.MAX, LocalTime.MAX);
 //    /**
 //     * Simulate JDK 8 method reference LocalDateTime::from.
 //     */
@@ -682,23 +682,23 @@ public final class LocalDateTime
 //    }
 
     //-----------------------------------------------------------------------
-    /**
-     * Gets the hour-of-day field.
-     *
-     * @return the hour-of-day, from 0 to 23
-     */
-    public int getHour() {
-        return time.getHour();
-    }
-
-    /**
-     * Gets the minute-of-hour field.
-     *
-     * @return the minute-of-hour, from 0 to 59
-     */
-    public int getMinute() {
-        return time.getMinute();
-    }
+//    /**
+//     * Gets the hour-of-day field.
+//     *
+//     * @return the hour-of-day, from 0 to 23
+//     */
+//    public int getHour() {
+//        return time.getHour();
+//    }
+//
+//    /**
+//     * Gets the minute-of-hour field.
+//     *
+//     * @return the minute-of-hour, from 0 to 59
+//     */
+//    public int getMinute() {
+//        return time.getMinute();
+//    }
 
     /**
      * Gets the second-of-minute field.

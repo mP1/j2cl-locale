@@ -35,8 +35,6 @@ import javaemul.internal.annotations.GwtIncompatible;
 import walkingkooka.j2cl.locale.org.threeten.bp.java.util.regex.Pattern;
 import walkingkooka.j2cl.locale.org.threeten.bp.jdk8.Jdk8Methods;
 import walkingkooka.j2cl.locale.org.threeten.bp.zone.ZoneRules;
-import walkingkooka.j2cl.locale.org.threeten.bp.zone.ZoneRulesException;
-import walkingkooka.j2cl.locale.org.threeten.bp.zone.ZoneRulesProvider;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -139,17 +137,17 @@ final class ZoneRegion extends ZoneId implements Serializable {
             throw new DateTimeException("Invalid ID for region-based ZoneId, invalid format: " + zoneId);
         }
         ZoneRules rules = null;
-        try {
-            // always attempt load for better behavior after deserialization
-            rules = ZoneRulesProvider.getRules(zoneId, true);
-        } catch (ZoneRulesException ex) {
+//        try {
+//            // always attempt load for better behavior after deserialization
+//            rules = ZoneRulesProvider.getRules(zoneId, true);
+//        } catch (ZoneRulesException ex) {
             // special case as removed from data file
             if (zoneId.equals("GMT0")) {
                 rules = ZoneOffset.UTC.getRules();
-            } else if (checkAvailable) {
-                throw ex;
+//            } else if (checkAvailable) {
+//                throw ex;
             }
-        }
+        //}
         return new ZoneRegion(zoneId, rules);
     }
 
@@ -207,9 +205,9 @@ final class ZoneRegion extends ZoneId implements Serializable {
         out.writeUTF(id);
     }
 
-    static ZoneId readExternal(DataInput in) throws IOException {
-        String id = in.readUTF();
-        return ofLenient(id);
-    }
+//    static ZoneId readExternal(DataInput in) throws IOException {
+//        String id = in.readUTF();
+//        return ofLenient(id);
+//    }
 
 }
