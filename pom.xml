@@ -179,12 +179,6 @@
                     <excludes>
                         <!-- cant really code coverage test an annotation processor -->
                         <exclude>walkingkooka/j2cl/locale/annotationprocessor/LocaleAwareAnnotationProcessor.*</exclude>
-                        <!-- these were copied from org/threeten/bp no new functionality was added only methods removed -->
-                        <exclude>walkingkooka/j2cl/locale/org/threeten/bp/*</exclude>
-                        <exclude>walkingkooka/j2cl/locale/org/threeten/bp/chrono/*</exclude>
-                        <exclude>walkingkooka/j2cl/locale/org/threeten/bp/jdk/*</exclude>
-                        <exclude>walkingkooka/j2cl/locale/org/threeten/bp/temporal/*</exclude>
-                        <exclude>walkingkooka/j2cl/locale/org/threeten/bp/zone/*</exclude>
                     </excludes>
                 </configuration>
                 <executions>
