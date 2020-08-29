@@ -24,6 +24,7 @@ import walkingkooka.reflect.JavaVisibility;
 import walkingkooka.text.CharSequences;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class LocaleAwareAnnotationProcessorTest implements ClassTesting<LocaleAwareAnnotationProcessor> {
 
@@ -35,6 +36,30 @@ public final class LocaleAwareAnnotationProcessorTest implements ClassTesting<Lo
     @Test
     public void testProtectedDefaultConstructorPresent() throws Exception {
         assertEquals(JavaVisibility.PROTECTED, JavaVisibility.of(LocaleAwareAnnotationProcessor.class.getDeclaredConstructor()));
+    }
+
+    // reportLoggingAnnotationProcessorArgumentFail.....................................................................
+
+    @Test
+    public void testReportLoggingAnnotationProcessorArgumentFailMissingAnnotationProcessor() {
+        this.reportAndFail("ABC",
+                null,
+                "ABC \"walkingkooka.j2cl.locale.Logging\", expected one of NONE, SLASH_SLASH_COMMENTS, TXT_FILE (https://github.com/mP1/j2cl-locale#logging-javac-annotation-processor-argument)");
+    }
+
+    @Test
+    public void testReportLoggingAnnotationProcessorArgumentFail() {
+        this.reportAndFail("ABC",
+                "XYZ",
+                "ABC \"walkingkooka.j2cl.locale.Logging\"=\"XYZ\", expected one of NONE, SLASH_SLASH_COMMENTS, TXT_FILE (https://github.com/mP1/j2cl-locale#logging-javac-annotation-processor-argument)");
+    }
+
+    private void reportAndFail(final String message,
+                               final String logging,
+                               final String expected) {
+        final IllegalStateException thrown = assertThrows(IllegalStateException.class,
+                () -> LocaleAwareAnnotationProcessor.reportLoggingAnnotationProcessorArgumentFail(message, logging));
+        assertEquals(expected, thrown.getMessage(), "message");
     }
 
     // stringDeclaration................................................................................................
