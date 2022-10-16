@@ -321,7 +321,6 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
         this.allAndCheck("EN*",
                 WalkingkookaLanguageTag.all()
                         .stream()
-                        .filter(t -> !t.isEmpty()) // https://github.com/mP1/walkingkooka/issues/2544
                         .filter(t -> CaseSensitivity.INSENSITIVE.equals(t, "EN") || CaseSensitivity.INSENSITIVE.startsWith(t, "EN"))
                         .collect(Collectors.toCollection(() -> Sets.sorted(String.CASE_INSENSITIVE_ORDER))));
     }
@@ -331,7 +330,6 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
         this.allAndCheck("EN*,FR",
                 WalkingkookaLanguageTag.all()
                         .stream()
-                        .filter(t -> !t.isEmpty()) // https://github.com/mP1/walkingkooka/issues/2544
                         .filter(t -> CaseSensitivity.INSENSITIVE.startsWith(t, "EN") || t.equalsIgnoreCase("FR"))
                         .collect(Collectors.toCollection(() -> Sets.sorted(String.CASE_INSENSITIVE_ORDER))));
     }
