@@ -181,7 +181,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
                 .indenting(INDENTATION);
     }
 
-    private final static Indentation INDENTATION = Indentation.with("  ");
+    private final static Indentation INDENTATION = Indentation.SPACES2;
 
     // adds slash slash comments to the beginning of every line.
     private static void printedLineHandler(final CharSequence line,
