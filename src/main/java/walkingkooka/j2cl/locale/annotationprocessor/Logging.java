@@ -33,7 +33,8 @@ enum Logging {
         @Override
         IndentingPrinter loggingDestination(final StringBuilder comments,
                                             final LocaleAwareAnnotationProcessor filer) {
-            return Printers.sink().indenting(Indentation.EMPTY);
+            return Printers.sink(LineEnding.NONE)
+                    .indenting(Indentation.EMPTY);
         }
 
         @Override
