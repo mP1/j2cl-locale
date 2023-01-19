@@ -97,10 +97,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
         // assume null means generated source does not exist...
         if (null == exists) {
-            // without this check the generated class will be written multiple times resulting in an exception when attempting to create the file.
-            if (environment.processingOver()) {
-                this.process0();
-            }
+            this.process0();
         }
 
         return false; // whether or not the set of annotation types are claimed by this processor
