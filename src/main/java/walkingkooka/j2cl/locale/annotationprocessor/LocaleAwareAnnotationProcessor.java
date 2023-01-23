@@ -22,6 +22,7 @@ import walkingkooka.j2cl.java.io.string.StringDataInputDataOutput;
 import walkingkooka.j2cl.locale.LocaleAware;
 import walkingkooka.j2cl.locale.WalkingkookaLanguageTag;
 import walkingkooka.reflect.ClassName;
+import walkingkooka.reflect.PackageName;
 import walkingkooka.text.CharSequences;
 import walkingkooka.text.Indentation;
 import walkingkooka.text.LineEnding;
@@ -93,7 +94,10 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     @Override
     public final boolean process(final Set<? extends TypeElement> annotations,
                                  final RoundEnvironment environment) {
-        final TypeElement exists = elements.getTypeElement(this.generatedClassName());
+        final TypeElement exists = elements.getTypeElement(
+                this.generatedClassName()
+                        .value()
+        );
 
         // assume null means generated source does not exist...
         if (null == exists) {
@@ -169,7 +173,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     }
 
     final IndentingPrinter createLoggingTextFile() throws IOException {
-        final ClassName type = ClassName.with(this.generatedClassName());
+        final ClassName type = this.generatedClassName();
 
         final Writer writer = this.filer.createResource(StandardLocation.CLASS_OUTPUT,
                 type.parentPackage().value(),
@@ -392,8 +396,8 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
      * Uses the generated class name to create its template resource name.
      */
     private String templateResourceName() {
-        final String typeName = this.generatedClassName();
-        return typeName.substring(typeName.lastIndexOf('.') + 1) + ".java.txt";
+        final ClassName typeName = this.generatedClassName();
+        return typeName.nameWithoutPackage() + ".java.txt";
     }
 
     // write source file................................................................................................
@@ -401,14 +405,41 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     /**
      * The fully qualified class name of the class source being generated.
      */
-    protected abstract String generatedClassName();
+    // VisibleForTesting
+    final ClassName generatedClassName() {
+        final String annotationProcessor = "AnnotationProcessor";
+
+        final ClassName className = ClassName.fromClass(this.getClass());
+        final String simpleClassName = className.nameWithoutPackage();
+        if (!simpleClassName.endsWith(annotationProcessor)) {
+            throw new IllegalStateException(
+                    "Annotation processor name must end with " +
+                            CharSequences.quoteAndEscape(annotationProcessor) +
+                            " but was " +
+                            CharSequences.quoteAndEscape(className.toString())
+            );
+        }
+
+        return ClassName.with(
+                className.parentPackage()
+                        .parent()
+                        .append(PackageName.with("generated"))
+                        .value() +
+                        '.' +
+                        CharSequences.subSequence(
+                                simpleClassName,
+                                0,
+                                -annotationProcessor.length()
+                        )
+        );
+    }
 
     /**
      * Writes the result of merging the template with the generated method source.
      */
     private void writeGeneratedTypeSource(final String content) throws IOException {
-        final String typeName = this.generatedClassName();
-        try (final Writer writer = this.filer.createSourceFile(typeName).openWriter()) {
+        final ClassName typeName = this.generatedClassName();
+        try (final Writer writer = this.filer.createSourceFile(typeName.value()).openWriter()) {
             writer.write(content);
             writer.flush();
         }
