@@ -57,7 +57,7 @@ import java.util.stream.Collectors;
 import java.util.zip.GZIPOutputStream;
 
 /**
- * An {@link AbstractProcessor} that has several (abstract) template method that probably generate a provider from
+ * An {@link AbstractProcessor} that has several (abstract) template method that probably generate a {@link Class} from
  * selected locales.
  */
 public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
@@ -121,7 +121,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
         try {
             final Logging logging = this.logging();
             final String localeFilter = this.localeFilter();
-            final String template = this.providerTemplate();
+            final String template = this.template();
 
             final Set<String> selectedLocales = WalkingkookaLanguageTag.all(localeFilter);
 
@@ -363,12 +363,12 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     /**
      * Reads the template that will be host the generated all() method.
      */
-    private String providerTemplate() throws IOException {
+    private String template() throws IOException {
         final String templateResourceName = this.templateResourceName();
 
         try (final InputStream resource = this.getClass().getResourceAsStream(templateResourceName)) {
             if (null == resource) {
-                throw new IllegalStateException("Unable to find provider template " + CharSequences.quoteAndEscape(templateResourceName));
+                throw new IllegalStateException("Unable to find template " + CharSequences.quoteAndEscape(templateResourceName));
             }
             try (final BufferedReader reader = new BufferedReader(new InputStreamReader(resource, Charset.defaultCharset()))) {
                 final StringBuilder text = new StringBuilder();
@@ -383,7 +383,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
                 }
                 return text.toString();
             } catch (final IOException cause) {
-                throw new IOException("Error reading provider template " + CharSequences.quoteAndEscape(templateResourceName));
+                throw new IOException("Error reading template " + CharSequences.quoteAndEscape(templateResourceName));
             }
         }
     }
