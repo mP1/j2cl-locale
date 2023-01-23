@@ -329,7 +329,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     // locale filter....................................................................................................
 
     @Override
-    public Set<String> getSupportedOptions() {
+    public final Set<String> getSupportedOptions() {
         final Set<String> arguments = Sets.ordered();
         arguments.add(LOCALE_ANNOTATION_PROCESSOR_OPTION);
         arguments.add(LOGGING_ANNOTATION_PROCESSOR_OPTION);
