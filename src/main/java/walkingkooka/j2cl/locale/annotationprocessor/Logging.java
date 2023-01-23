@@ -80,8 +80,8 @@ enum Logging {
 
     abstract String replaceTemplatePlaceholder(final String template, final CharSequence comment);
 
-    final static String replaceTemplatePlaceholder0(final String template,
-                                                    final String value) {
+    static String replaceTemplatePlaceholder0(final String template,
+                                              final String value) {
         return LocaleAwareAnnotationProcessor.replace(template,
                 LocaleAwareAnnotationProcessor.DATA_COMMENT,
                 value);
