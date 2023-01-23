@@ -19,6 +19,7 @@ package walkingkooka.j2cl.locale.annotationprocessor;
 
 import org.junit.jupiter.api.Test;
 import walkingkooka.reflect.ClassAttributes;
+import walkingkooka.reflect.ClassName;
 import walkingkooka.reflect.ClassTesting;
 import walkingkooka.reflect.JavaVisibility;
 import walkingkooka.text.CharSequences;
@@ -36,6 +37,16 @@ public final class LocaleAwareAnnotationProcessorTest implements ClassTesting<Lo
     @Test
     public void testProtectedDefaultConstructorPresent() throws Exception {
         assertEquals(JavaVisibility.PROTECTED, JavaVisibility.of(LocaleAwareAnnotationProcessor.class.getDeclaredConstructor()));
+    }
+
+    // generatedClassName...............................................................................................
+
+    @Test
+    public void testGeneratedClassName() {
+        this.checkEquals(
+                ClassName.with("walkingkooka.j2cl.locale.generated.TestLocaleAware"),
+                new TestLocaleAwareAnnotationProcessor().generatedClassName()
+        );
     }
 
     // reportLoggingAnnotationProcessorArgumentFail.....................................................................
