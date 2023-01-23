@@ -52,6 +52,7 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -142,6 +143,8 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
     public final static String SELECTED_LOCALES = "$SELECTED_LOCALES";
 
+    public final static String DEFAULT = "$DEFAULT";
+
     public final static String DATA_COMMENT = "$DATA_COMMENT";
 
     public final static String DATA = "$DATA";
@@ -153,18 +156,23 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     private void process0() {
         try {
             final Logging logging = this.logging();
+
             final String localeFilter = this.localeFilter();
+            final Set<String> selectedLocales = WalkingkookaLanguageTag.all(localeFilter);
+            final Optional<String> defaultValue = this.defaultValue(
+                    selectedLocales,
+                    this.arguments::get
+            );
+
             final String template = this.template();
 
-            final Set<String> selectedLocales = WalkingkookaLanguageTag.all(localeFilter);
-
-            final String merged = replace(
+            String merged = replace(
                     template,
                     ANNOTATION_PROCESSOR_LOCALES_FILTER,
                     CharSequences.quoteAndEscape(localeFilter)
             );
 
-            final String merged2 = replace(
+            merged = replace(
                     merged,
                     SELECTED_LOCALES,
                     CharSequences.quoteAndEscape(
@@ -174,6 +182,16 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
                                     )
                     )
             );
+
+            if(defaultValue.isPresent()) {
+                merged = replace(
+                        merged,
+                        DEFAULT,
+                        CharSequences.quoteAndEscape(
+                                defaultValue.get()
+                        )
+                );
+            }
 
             final String data;
             final StringBuilder comments = new StringBuilder();
@@ -194,18 +212,18 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
                 this.printSummary(summary + ", " + rawAndCompressedSize(data));
             }
 
-            final String merged3 = logging.replaceTemplatePlaceholder(
-                    merged2,
+            merged = logging.replaceTemplatePlaceholder(
+                    merged,
                     comments
             );
 
-            final String merged4 = replace(
-                    merged3,
+            merged = replace(
+                    merged,
                     DATA,
                     stringDeclaration(data, 256 * 64 - 1)
             ); // 16k chars UTF8 encoded cant overflow 64k chars
 
-            this.writeGeneratedTypeSource(merged4);
+            this.writeGeneratedTypeSource(merged);
         } catch (final Exception cause) {
             this.error(cause.getMessage());
         }
@@ -370,6 +388,15 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
      * Additional annotation processor arguments in addition to {@link #LOCALE_ANNOTATION_PROCESSOR_OPTION}.
      */
     protected abstract Set<String> additionalArguments();
+
+
+    // defaultValue......................................................................................................
+
+    /**
+     * The locale and timezone annotation processors will return the default locale or timezone others will return {@link Optional#empty()}.
+     */
+    protected abstract Optional<String> defaultValue(final Set<String> selectedLocales,
+                                                     final Function<String, String> arguments);
 
     // locale...........................................................................................................
 
