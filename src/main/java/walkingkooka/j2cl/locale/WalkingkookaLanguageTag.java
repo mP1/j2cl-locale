@@ -453,13 +453,13 @@ public final class WalkingkookaLanguageTag {
         return this.language;
     }
 
-    private String language;
+    private final String language;
 
     public String country() {
         return this.country;
     }
 
-    private String country;
+    private final String country;
 
     public String script() {
         return this.script;
