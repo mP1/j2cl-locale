@@ -132,15 +132,18 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
             final String merged = replace(
                     template,
                     ANNOTATION_PROCESSOR_LOCALES_FILTER,
-                    CharSequences.quoteAndEscape(localeFilter).toString()
+                    CharSequences.quoteAndEscape(localeFilter)
             );
 
             final String merged2 = replace(
                     merged,
                     SELECTED_LOCALES,
-                    CharSequences.quoteAndEscape(selectedLocales.stream()
-                                    .collect(Collectors.joining(",")))
-                            .toString()
+                    CharSequences.quoteAndEscape(
+                            selectedLocales.stream()
+                                    .collect(
+                                            Collectors.joining(",")
+                                    )
+                    )
             );
 
             final String data;
@@ -170,7 +173,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
             final String merged4 = replace(
                     merged3,
                     DATA,
-                    "" + stringDeclaration(data, 256 * 64 - 1)
+                    stringDeclaration(data, 256 * 64 - 1)
             ); // 16k chars UTF8 encoded cant overflow 64k chars
 
             this.writeGeneratedTypeSource(merged4);
@@ -188,7 +191,8 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     final IndentingPrinter createLoggingTextFile() throws IOException {
         final ClassName type = this.generatedClassName();
 
-        final Writer writer = this.filer.createResource(StandardLocation.CLASS_OUTPUT,
+        final Writer writer = this.filer.createResource(
+                StandardLocation.CLASS_OUTPUT,
                 type.parentPackage()
                         .value(),
                 type.nameWithoutPackage() + ".DATA.log"
@@ -259,6 +263,16 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
         statements.append(".toString()");
         return statements;
+    }
+
+    private static String replace(final String template,
+                                  final String placeholder,
+                                  final CharSequence value) {
+        return replace(
+                template,
+                placeholder,
+                value.toString()
+        );
     }
 
     static String replace(final String template,
