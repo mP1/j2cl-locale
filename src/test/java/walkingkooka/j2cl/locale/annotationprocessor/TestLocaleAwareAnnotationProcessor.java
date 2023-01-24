@@ -20,6 +20,7 @@ package walkingkooka.j2cl.locale.annotationprocessor;
 import walkingkooka.text.printer.IndentingPrinter;
 
 import java.io.DataOutput;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -27,6 +28,12 @@ public final class TestLocaleAwareAnnotationProcessor extends LocaleAwareAnnotat
 
     @Override
     protected Set<String> additionalArguments() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    protected Optional<String> defaultValue(final Set<String> selectedLocales,
+                                            final Function<String, String> arguments) {
         throw new UnsupportedOperationException();
     }
 
