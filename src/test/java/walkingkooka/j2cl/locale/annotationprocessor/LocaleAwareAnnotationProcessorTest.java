@@ -18,6 +18,8 @@
 package walkingkooka.j2cl.locale.annotationprocessor;
 
 import org.junit.jupiter.api.Test;
+import walkingkooka.collect.map.Maps;
+import walkingkooka.collect.set.Sets;
 import walkingkooka.reflect.ClassAttributes;
 import walkingkooka.reflect.ClassName;
 import walkingkooka.reflect.ClassTesting;
@@ -37,6 +39,33 @@ public final class LocaleAwareAnnotationProcessorTest implements ClassTesting<Lo
     @Test
     public void testProtectedDefaultConstructorPresent() throws Exception {
         assertEquals(JavaVisibility.PROTECTED, JavaVisibility.of(LocaleAwareAnnotationProcessor.class.getDeclaredConstructor()));
+    }
+
+    // verifyRequiredOptions............................................................................................
+
+    @Test
+    public void testVerifyRequiredOptions() {
+        final IllegalArgumentException thrown = assertThrows(
+                IllegalArgumentException.class,
+                () -> LocaleAwareAnnotationProcessor.verifyRequiredOptions(
+                        Maps.of(
+                                "a1", "value1",
+                                "b2", "value2",
+                                "empty3", ""
+                        ),
+                        Sets.of(
+                                "a1",
+                                "b2",
+                                "empty3",
+                                "missing4"
+                        )
+                )
+        );
+
+        this.checkEquals(
+                "Missing one or more required annotation processor options: \"empty3\", \"missing4\"",
+                thrown.getMessage()
+        );
     }
 
     // generatedClassName...............................................................................................

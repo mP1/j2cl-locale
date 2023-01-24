@@ -83,10 +83,39 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
         this.elements = environment.getElementUtils();
         this.filer = environment.getFiler();
-        this.arguments = environment.getOptions();
-        this.localeFilter = this.arguments.get(LOCALE_ANNOTATION_PROCESSOR_OPTION);
-        this.logging = this.arguments.get(LOGGING_ANNOTATION_PROCESSOR_OPTION);
+
+        final Map<String, String> options = environment.getOptions();
+        verifyRequiredOptions(
+                options,
+                this.getSupportedOptions()
+        );
+
+        this.arguments = options;
+        this.localeFilter = options.get(LOCALE_ANNOTATION_PROCESSOR_OPTION);
+        this.logging = options.get(LOGGING_ANNOTATION_PROCESSOR_OPTION);
+
         this.messager = environment.getMessager();
+    }
+
+    // @VisibleForTesting
+    static void verifyRequiredOptions(final Map<String, String> options,
+                                      final Set<String> required) {
+        final Set<String> missing = Sets.ordered();
+        required.forEach(o -> {
+            final String value = options.get(o);
+            if (CharSequences.isNullOrEmpty(value)) {
+                missing.add(o);
+            }
+        });
+
+        if (!missing.isEmpty()) {
+            throw new IllegalArgumentException(
+                    "Missing one or more required annotation processor options: " +
+                            missing.stream()
+                                    .map(CharSequences::quoteAndEscape)
+                                    .collect(Collectors.joining(", "))
+            );
+        }
     }
 
     private Map<String, String> arguments;
@@ -348,15 +377,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
      * Returns the annotation processor locale filter option or fails.
      */
     private String localeFilter() {
-        final String localeFilter = this.localeFilter;
-        if (null == localeFilter) {
-            throw new IllegalStateException(
-                    "Missing annotation processor argument " +
-                            CharSequences.quote(LOCALE_ANNOTATION_PROCESSOR_OPTION) +
-                            " with csv list of selected Locale(s) (https://github.com/mP1/j2cl-locale#locale-selection-javac-annotation-processor-argument"
-            );
-        }
-        return localeFilter;
+        return this.localeFilter;
     }
 
     private String localeFilter;
