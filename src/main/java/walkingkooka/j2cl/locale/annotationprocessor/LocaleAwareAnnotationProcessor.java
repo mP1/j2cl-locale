@@ -28,7 +28,6 @@ import walkingkooka.text.Indentation;
 import walkingkooka.text.LineEnding;
 import walkingkooka.text.printer.IndentingPrinter;
 import walkingkooka.text.printer.Printer;
-import walkingkooka.text.printer.PrinterException;
 import walkingkooka.text.printer.Printers;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -255,8 +254,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     // adds slash slash comments to the beginning of every line.
     private static void printedLineHandler(final CharSequence line,
                                            final LineEnding lineEnding,
-                                           final Printer printer)
-            throws PrinterException {
+                                           final Printer printer) {
         printer.print("// " + line + lineEnding);
     }
 
