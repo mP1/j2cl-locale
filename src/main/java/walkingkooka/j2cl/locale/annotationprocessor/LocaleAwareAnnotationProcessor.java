@@ -224,6 +224,7 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
             this.writeGeneratedTypeSource(merged);
         } catch (final Exception cause) {
+            cause.printStackTrace();
             this.error(cause.getMessage());
         }
     }
