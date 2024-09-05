@@ -21,6 +21,7 @@ import javaemul.internal.annotations.GwtIncompatible;
 import walkingkooka.NeverError;
 import walkingkooka.collect.list.Lists;
 import walkingkooka.collect.set.Sets;
+import walkingkooka.collect.set.SortedSets;
 import walkingkooka.j2cl.locale.annotationprocessor.LocaleAwareAnnotationProcessorTool;
 import walkingkooka.predicate.Predicates;
 import walkingkooka.text.CaseSensitivity;
@@ -107,7 +108,7 @@ public final class WalkingkookaLanguageTag {
 
     @GwtIncompatible
     private static Set<String> all0(final Predicate<String> filter) {
-        final Set<String> all = Sets.sorted();
+        final Set<String> all = SortedSets.tree();
 
         for(final java.util.Locale locale : java.util.Locale.getAvailableLocales()) {
             if(locale.getExtensionKeys().size() > 0) {

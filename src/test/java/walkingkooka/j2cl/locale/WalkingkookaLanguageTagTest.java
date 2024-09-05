@@ -23,6 +23,7 @@ import walkingkooka.ToStringTesting;
 import walkingkooka.collect.list.Lists;
 import walkingkooka.collect.map.Maps;
 import walkingkooka.collect.set.Sets;
+import walkingkooka.collect.set.SortedSets;
 import walkingkooka.j2cl.java.io.string.StringDataInputDataOutput;
 import walkingkooka.predicate.PredicateTesting;
 import walkingkooka.reflect.ClassTesting;
@@ -322,7 +323,7 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
                 WalkingkookaLanguageTag.all()
                         .stream()
                         .filter(t -> CaseSensitivity.INSENSITIVE.equals(t, "EN") || CaseSensitivity.INSENSITIVE.startsWith(t, "EN"))
-                        .collect(Collectors.toCollection(() -> Sets.sorted(String.CASE_INSENSITIVE_ORDER))));
+                        .collect(Collectors.toCollection(() -> SortedSets.tree(String.CASE_INSENSITIVE_ORDER))));
     }
 
     @Test
@@ -331,7 +332,7 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
                 WalkingkookaLanguageTag.all()
                         .stream()
                         .filter(t -> CaseSensitivity.INSENSITIVE.startsWith(t, "EN") || t.equalsIgnoreCase("FR"))
-                        .collect(Collectors.toCollection(() -> Sets.sorted(String.CASE_INSENSITIVE_ORDER))));
+                        .collect(Collectors.toCollection(() -> SortedSets.tree(String.CASE_INSENSITIVE_ORDER))));
     }
 
     private void allAndCheck(final String filter,
