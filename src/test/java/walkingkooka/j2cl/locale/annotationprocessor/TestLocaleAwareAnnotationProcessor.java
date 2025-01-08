@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-public final class TestLocaleAwareAnnotationProcessor extends LocaleAwareAnnotationProcessor{
+public final class TestLocaleAwareAnnotationProcessor extends LocaleAwareAnnotationProcessor {
 
     @Override
     protected Set<String> additionalArguments() {

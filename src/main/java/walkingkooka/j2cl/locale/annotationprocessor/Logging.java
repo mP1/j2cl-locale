@@ -34,7 +34,7 @@ enum Logging {
         IndentingPrinter loggingDestination(final StringBuilder comments,
                                             final LocaleAwareAnnotationProcessor filer) {
             return Printers.sink(LineEnding.NONE)
-                    .indenting(Indentation.EMPTY);
+                .indenting(Indentation.EMPTY);
         }
 
         @Override
@@ -83,7 +83,7 @@ enum Logging {
     static String replaceTemplatePlaceholder0(final String template,
                                               final String value) {
         return LocaleAwareAnnotationProcessor.replace(template,
-                LocaleAwareAnnotationProcessor.DATA_COMMENT,
-                value);
+            LocaleAwareAnnotationProcessor.DATA_COMMENT,
+            value);
     }
 }

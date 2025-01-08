@@ -76,7 +76,7 @@ public final class WalkingkookaLanguageTag {
                 // EN* matches EN and EN* anything after.
                 final String beforeWildcard = token.substring(0, token.length() - 1);
                 predicate = predicate.or(Predicates.charSequenceStartsWith(CaseSensitivity.INSENSITIVE, beforeWildcard))
-                        .or(Predicate.isEqual(beforeWildcard));
+                    .or(Predicate.isEqual(beforeWildcard));
                 continue;
             }
 
@@ -110,29 +110,29 @@ public final class WalkingkookaLanguageTag {
     private static Set<String> all0(final Predicate<String> filter) {
         final Set<String> all = SortedSets.tree();
 
-        for(final java.util.Locale locale : java.util.Locale.getAvailableLocales()) {
-            if(locale.getExtensionKeys().size() > 0) {
+        for (final java.util.Locale locale : java.util.Locale.getAvailableLocales()) {
+            if (locale.getExtensionKeys().size() > 0) {
                 continue;
             }
 
             final String languageTag = locale.toLanguageTag();
-            if(false == filter.test(languageTag)) {
+            if (false == filter.test(languageTag)) {
                 continue;
             }
 
             all.add(languageTag);
 
             final String language = locale.getLanguage();
-            if(language.equals("und")) {
+            if (language.equals("und")) {
                 continue;
             }
 
             final String languageFixed = WalkingkookaLanguageTag.oldToNewLanguage(language);
-            if(languageFixed.equals(language)) {
+            if (languageFixed.equals(language)) {
                 continue;
             }
 
-            if(WalkingkookaLanguageTag.isUnsupported(languageTag)) {
+            if (WalkingkookaLanguageTag.isUnsupported(languageTag)) {
                 continue;
             }
 
@@ -184,10 +184,10 @@ public final class WalkingkookaLanguageTag {
     /**
      * Locales are comma separated and their components are slash separated.
      */
-    public static List<WalkingkookaLanguageTag> decode(final DataInput encoded) throws IOException  {
+    public static List<WalkingkookaLanguageTag> decode(final DataInput encoded) throws IOException {
         final int count = encoded.readInt();
         final List<WalkingkookaLanguageTag> decoded = Lists.array();
-        for(int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             decoded.add(decode0(encoded.readUTF()));
         }
         return decoded;
@@ -260,10 +260,10 @@ public final class WalkingkookaLanguageTag {
         }
 
         return with(tag,
-                language,
-                country,
-                variant,
-                script);
+            language,
+            country,
+            variant,
+            script);
     }
 
     /**
@@ -323,10 +323,10 @@ public final class WalkingkookaLanguageTag {
         }
 
         return with(null,
-                language,
-                country,
-                variant,
-                script);
+            language,
+            country,
+            variant,
+            script);
     }
 
     /**
@@ -343,8 +343,8 @@ public final class WalkingkookaLanguageTag {
 
     private static String titleCase(final String text) {
         return text.isEmpty() ?
-                "" :
-                Character.toUpperCase(text.charAt(0)) + text.substring(1).toLowerCase();
+            "" :
+            Character.toUpperCase(text.charAt(0)) + text.substring(1).toLowerCase();
     }
 
     /**
@@ -412,10 +412,10 @@ public final class WalkingkookaLanguageTag {
                                                final String country,
                                                final String variant) {
         return with(tag,
-                language,
-                country,
-                variant,
-                "");
+            language,
+            country,
+            variant,
+            "");
     }
 
     /**
@@ -427,10 +427,10 @@ public final class WalkingkookaLanguageTag {
                                                final String variant,
                                                final String script) {
         return new WalkingkookaLanguageTag(tag,
-                language.toLowerCase(),
-                country.toUpperCase(),
-                variant,
-                script);
+            language.toLowerCase(),
+            country.toUpperCase(),
+            variant,
+            script);
     }
 
     /**
@@ -510,17 +510,17 @@ public final class WalkingkookaLanguageTag {
         final T result = lookup.apply(this.toLanguageTag());
 
         return null == result ?
-                this.variant.length() + this.script.length() > 0 ? // if it has script or variant try without those
-                        this.tryLookupWithoutScriptAndVariant(lookup) :
-                        this.tryLookupWithoutCountry(lookup) : // try without country last possible try.
-                Optional.of(result);
+            this.variant.length() + this.script.length() > 0 ? // if it has script or variant try without those
+                this.tryLookupWithoutScriptAndVariant(lookup) :
+                this.tryLookupWithoutCountry(lookup) : // try without country last possible try.
+            Optional.of(result);
     }
 
     private <T> Optional<T> tryLookupWithoutScriptAndVariant(final Function<String, T> lookup) {
         final T result = lookup.apply(new WalkingkookaLanguageTag(null, this.language, this.country, "", "").toLanguageTag());
         return null == result ?
-                this.tryLookupWithoutCountry(lookup) :
-                Optional.of(result);
+            this.tryLookupWithoutCountry(lookup) :
+            Optional.of(result);
     }
 
     private <T> Optional<T> tryLookupWithoutCountry(final Function<String, T> lookup) {
@@ -541,10 +541,10 @@ public final class WalkingkookaLanguageTag {
 
     private boolean equals0(final WalkingkookaLanguageTag other) {
         return Objects.equals(this.country, other.country) &&
-                Objects.equals(this.language, other.language) &&
-                Objects.equals(this.variant, other.variant) &&
-                Objects.equals(this.script, other.script) &&
-                Objects.equals(this.toLanguageTag(), other.toLanguageTag());
+            Objects.equals(this.language, other.language) &&
+            Objects.equals(this.variant, other.variant) &&
+            Objects.equals(this.script, other.script) &&
+            Objects.equals(this.toLanguageTag(), other.toLanguageTag());
     }
 
     @Override

@@ -36,8 +36,8 @@ public class TestGwtTest extends GWTTestCase {
 
     public void testAssertEquals() {
         assertEquals(
-                1,
-                1
+            1,
+            1
         );
     }
 
@@ -45,7 +45,7 @@ public class TestGwtTest extends GWTTestCase {
         final StringBuilder data = new StringBuilder();
         final DataOutput dataOutput = StringDataInputDataOutput.output(data::append);
 
-        final TimeZoneCalendar calendar = TimeZoneCalendar.with(1 , 2);
+        final TimeZoneCalendar calendar = TimeZoneCalendar.with(1, 2);
         calendar.write(dataOutput);
 
         final DataInput dataInput = StringDataInputDataOutput.input(data.toString());

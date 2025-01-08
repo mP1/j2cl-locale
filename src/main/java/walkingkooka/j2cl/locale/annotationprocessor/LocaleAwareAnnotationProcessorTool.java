@@ -18,7 +18,6 @@
 package walkingkooka.j2cl.locale.annotationprocessor;
 
 import walkingkooka.collect.map.Maps;
-import walkingkooka.collect.set.Sets;
 import walkingkooka.collect.set.SortedSets;
 import walkingkooka.reflect.PublicStaticHelper;
 import walkingkooka.text.CharSequences;
@@ -47,8 +46,8 @@ public final class LocaleAwareAnnotationProcessorTool implements PublicStaticHel
      */
     public static Set<Locale> toLocales(final Set<String> languageTags) {
         return languageTags.stream()
-                .map(Locale::forLanguageTag)
-                .collect(Collectors.toCollection(() -> SortedSets.tree(LOCALE_COMPARATOR)));
+            .map(Locale::forLanguageTag)
+            .collect(Collectors.toCollection(() -> SortedSets.tree(LOCALE_COMPARATOR)));
     }
 
     public static <T extends Comparable<T>> Map<T, Set<Locale>> buildMultiLocaleMap(final Function<Locale, T> extractor,

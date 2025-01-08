@@ -36,7 +36,7 @@ public final class LocaleAwareAnnotationProcessorToolTest implements PublicStati
     @Test
     public void testToLocales() {
         assertEquals(Sets.of(Locale.forLanguageTag("EN-AU")),
-                LocaleAwareAnnotationProcessorTool.toLocales(Sets.of("EN-AU")));
+            LocaleAwareAnnotationProcessorTool.toLocales(Sets.of("EN-AU")));
     }
 
     @Test
@@ -51,9 +51,9 @@ public final class LocaleAwareAnnotationProcessorToolTest implements PublicStati
         sundayToLocales.put("domingo", Sets.of(ES_ES));
 
         assertEquals(sundayToLocales,
-                LocaleAwareAnnotationProcessorTool.buildMultiLocaleMap(String.CASE_INSENSITIVE_ORDER,
-                        LocaleAwareAnnotationProcessorToolTest::firstDayOfWeek,
-                        Sets.of(EN_AU, FR_FR, ES_ES)));
+            LocaleAwareAnnotationProcessorTool.buildMultiLocaleMap(String.CASE_INSENSITIVE_ORDER,
+                LocaleAwareAnnotationProcessorToolTest::firstDayOfWeek,
+                Sets.of(EN_AU, FR_FR, ES_ES)));
     }
 
     @Test
@@ -68,8 +68,8 @@ public final class LocaleAwareAnnotationProcessorToolTest implements PublicStati
         sundayToLocales.put("domingo", Sets.of(ES_ES));
 
         assertEquals(sundayToLocales,
-                LocaleAwareAnnotationProcessorTool.buildMultiLocaleMap(LocaleAwareAnnotationProcessorToolTest::firstDayOfWeek,
-                        Sets.of(EN_AU, FR_FR, ES_ES)));
+            LocaleAwareAnnotationProcessorTool.buildMultiLocaleMap(LocaleAwareAnnotationProcessorToolTest::firstDayOfWeek,
+                Sets.of(EN_AU, FR_FR, ES_ES)));
     }
 
     @Test
@@ -87,8 +87,8 @@ public final class LocaleAwareAnnotationProcessorToolTest implements PublicStati
         sundayToLocales.put("domingo", Sets.of(ES_ES, ES_MX, ES_AR));
 
         assertEquals(sundayToLocales,
-                LocaleAwareAnnotationProcessorTool.buildMultiLocaleMap(LocaleAwareAnnotationProcessorToolTest::firstDayOfWeek,
-                        Sets.of(EN_AU, EN_NZ, FR_FR, ES_ES, ES_MX, ES_AR)));
+            LocaleAwareAnnotationProcessorTool.buildMultiLocaleMap(LocaleAwareAnnotationProcessorToolTest::firstDayOfWeek,
+                Sets.of(EN_AU, EN_NZ, FR_FR, ES_ES, ES_MX, ES_AR)));
     }
 
     private static String firstDayOfWeek(final Locale locale) {
@@ -135,7 +135,7 @@ public final class LocaleAwareAnnotationProcessorToolTest implements PublicStati
     private void findMostPopularLocaleKey(final Map<CharSequence, Set<Locale>> valueToLocales,
                                           final CharSequence expected) {
         assertEquals(expected.toString(),
-                LocaleAwareAnnotationProcessorTool.findMostPopularLocaleKey(valueToLocales).toString());
+            LocaleAwareAnnotationProcessorTool.findMostPopularLocaleKey(valueToLocales).toString());
     }
 
     @Override
