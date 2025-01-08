@@ -37,9 +37,9 @@ public final class TimeZoneDisplay implements Comparable<TimeZoneDisplay> {
      */
     public static TimeZoneDisplay read(final DataInput data) throws IOException {
         return with(data.readUTF(),
-                data.readUTF(),
-                data.readUTF(),
-                data.readUTF());
+            data.readUTF(),
+            data.readUTF(),
+            data.readUTF());
     }
 
     public static TimeZoneDisplay with(final String shortDisplayName,
@@ -47,9 +47,9 @@ public final class TimeZoneDisplay implements Comparable<TimeZoneDisplay> {
                                        final String longDisplayName,
                                        final String longDisplayNameDaylight) {
         return new TimeZoneDisplay(shortDisplayName,
-                shortDisplayNameDaylight,
-                longDisplayName,
-                longDisplayNameDaylight);
+            shortDisplayNameDaylight,
+            longDisplayName,
+            longDisplayNameDaylight);
     }
 
     private TimeZoneDisplay(final String shortDisplayName,
@@ -92,19 +92,19 @@ public final class TimeZoneDisplay implements Comparable<TimeZoneDisplay> {
 
     private boolean equals0(final TimeZoneDisplay other) {
         return this.shortDisplayName.equals(other.shortDisplayName) &&
-                this.shortDisplayNameDaylight.equals(other.shortDisplayNameDaylight) &&
-                this.longDisplayName.equals(other.longDisplayName) &&
-                this.longDisplayNameDaylight.equals(other.longDisplayNameDaylight);
+            this.shortDisplayNameDaylight.equals(other.shortDisplayNameDaylight) &&
+            this.longDisplayName.equals(other.longDisplayName) &&
+            this.longDisplayNameDaylight.equals(other.longDisplayNameDaylight);
     }
 
     @Override
     public String toString() {
         return ToStringBuilder.empty()
-                .value(this.shortDisplayName)
-                .value(this.shortDisplayNameDaylight)
-                .value(this.longDisplayName)
-                .value(this.longDisplayNameDaylight)
-                .build();
+            .value(this.shortDisplayName)
+            .value(this.shortDisplayNameDaylight)
+            .value(this.longDisplayName)
+            .value(this.longDisplayNameDaylight)
+            .build();
     }
 
     // Comparable.......................................................................................................

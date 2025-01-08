@@ -34,9 +34,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class TimeZoneCalendarTest implements ClassTesting2<TimeZoneCalendar>,
-        HashCodeEqualsDefinedTesting2<TimeZoneCalendar>,
-        ComparableTesting2<TimeZoneCalendar>,
-        ToStringTesting<TimeZoneCalendar> {
+    HashCodeEqualsDefinedTesting2<TimeZoneCalendar>,
+    ComparableTesting2<TimeZoneCalendar>,
+    ToStringTesting<TimeZoneCalendar> {
 
     private final static int FIRST = 1;
     private final static int MINIMAL = 5;
@@ -46,7 +46,7 @@ public final class TimeZoneCalendarTest implements ClassTesting2<TimeZoneCalenda
         final StringBuilder data = new StringBuilder();
         final DataOutput dataOutput = StringDataInputDataOutput.output(data::append);
 
-        final TimeZoneCalendar calendar = TimeZoneCalendar.with(1 , 2);
+        final TimeZoneCalendar calendar = TimeZoneCalendar.with(1, 2);
         calendar.write(dataOutput);
 
         final DataInput dataInput = StringDataInputDataOutput.input(data.toString());
@@ -77,7 +77,7 @@ public final class TimeZoneCalendarTest implements ClassTesting2<TimeZoneCalenda
     @Test
     public void testToString() {
         this.toStringAndCheck(this.createComparable().toString(),
-                "firstDayOfWeek=1 minimalDaysInFirstWeek=5");
+            "firstDayOfWeek=1 minimalDaysInFirstWeek=5");
     }
 
     @Override

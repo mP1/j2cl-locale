@@ -30,6 +30,6 @@ public class GregorianCalendar extends Calendar {
      */
     public static final int AD = 1;
 
-    public static byte[] DaysInMonth = new byte[] { 31, 28, 31, 30, 31, 30, 31, 31,
-            30, 31, 30, 31 };
+    public static byte[] DaysInMonth = new byte[]{31, 28, 31, 30, 31, 30, 31, 31,
+        30, 31, 30, 31};
 }

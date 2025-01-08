@@ -86,8 +86,8 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
         final Map<String, String> options = environment.getOptions();
         verifyRequiredOptions(
-                options,
-                this.getSupportedOptions()
+            options,
+            this.getSupportedOptions()
         );
 
         this.arguments = options;
@@ -110,10 +110,10 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
         if (!missing.isEmpty()) {
             throw new IllegalArgumentException(
-                    "Missing one or more required annotation processor options: " +
-                            missing.stream()
-                                    .map(CharSequences::quoteAndEscape)
-                                    .collect(Collectors.joining(", "))
+                "Missing one or more required annotation processor options: " +
+                    missing.stream()
+                        .map(CharSequences::quoteAndEscape)
+                        .collect(Collectors.joining(", "))
             );
         }
     }
@@ -124,8 +124,8 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     public final boolean process(final Set<? extends TypeElement> annotations,
                                  final RoundEnvironment environment) {
         final TypeElement exists = elements.getTypeElement(
-                this.generatedClassName()
-                        .value()
+            this.generatedClassName()
+                .value()
         );
 
         // assume null means generated source does not exist...
@@ -159,36 +159,36 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
             final String localeFilter = this.localeFilter();
             final Set<String> selectedLocales = WalkingkookaLanguageTag.all(localeFilter);
             final Optional<String> defaultValue = this.defaultValue(
-                    selectedLocales,
-                    this.arguments::get
+                selectedLocales,
+                this.arguments::get
             );
 
             final String template = this.template();
 
             String merged = replace(
-                    template,
-                    ANNOTATION_PROCESSOR_LOCALES_FILTER,
-                    CharSequences.quoteAndEscape(localeFilter)
+                template,
+                ANNOTATION_PROCESSOR_LOCALES_FILTER,
+                CharSequences.quoteAndEscape(localeFilter)
             );
 
             merged = replace(
-                    merged,
-                    SELECTED_LOCALES,
-                    CharSequences.quoteAndEscape(
-                            selectedLocales.stream()
-                                    .collect(
-                                            Collectors.joining(",")
-                                    )
-                    )
+                merged,
+                SELECTED_LOCALES,
+                CharSequences.quoteAndEscape(
+                    selectedLocales.stream()
+                        .collect(
+                            Collectors.joining(",")
+                        )
+                )
             );
 
-            if(defaultValue.isPresent()) {
+            if (defaultValue.isPresent()) {
                 merged = replace(
-                        merged,
-                        DEFAULT,
-                        CharSequences.quoteAndEscape(
-                                defaultValue.get()
-                        )
+                    merged,
+                    DEFAULT,
+                    CharSequences.quoteAndEscape(
+                        defaultValue.get()
+                    )
                 );
             }
 
@@ -199,11 +199,11 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
                 final StringBuilder dataStringBuilder = new StringBuilder();
 
                 final String summary = this.generate(
-                        localeFilter,
-                        selectedLocales,
-                        this.arguments::get,
-                        StringDataInputDataOutput.output(dataStringBuilder::append),
-                        printer
+                    localeFilter,
+                    selectedLocales,
+                    this.arguments::get,
+                    StringDataInputDataOutput.output(dataStringBuilder::append),
+                    printer
                 );
                 printer.flush();
 
@@ -212,14 +212,14 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
             }
 
             merged = logging.replaceTemplatePlaceholder(
-                    merged,
-                    comments
+                merged,
+                comments
             );
 
             merged = replace(
-                    merged,
-                    DATA,
-                    stringDeclaration(data, 256 * 64 - 1)
+                merged,
+                DATA,
+                stringDeclaration(data, 256 * 64 - 1)
             ); // 16k chars UTF8 encoded cant overflow 64k chars
 
             this.writeGeneratedTypeSource(merged);
@@ -231,22 +231,22 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
     public static IndentingPrinter comments(final Printer printer) {
         return printer.printedLine(
-                LocaleAwareAnnotationProcessor::printedLineHandler
-                ).indenting(INDENTATION);
+            LocaleAwareAnnotationProcessor::printedLineHandler
+        ).indenting(INDENTATION);
     }
 
     final IndentingPrinter createLoggingTextFile() throws IOException {
         final ClassName type = this.generatedClassName();
 
         final Writer writer = this.filer.createResource(
-                StandardLocation.CLASS_OUTPUT,
-                type.parentPackage()
-                        .value(),
-                type.nameWithoutPackage() + ".DATA.log"
+            StandardLocation.CLASS_OUTPUT,
+            type.parentPackage()
+                .value(),
+            type.nameWithoutPackage() + ".DATA.log"
         ).openWriter();
         return Printers.writer(
-                writer,
-                LineEnding.SYSTEM
+            writer,
+            LineEnding.SYSTEM
         ).indenting(INDENTATION);
     }
 
@@ -261,12 +261,12 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
     static CharSequence stringDeclaration(final String data, final int max) {
         return data.length() < max ?
-                CharSequences.quoteAndEscape(data) :
-                stringBuilderSplit(
-                        CharSequences.escape(data)
-                                .toString(),
-                        max
-                );
+            CharSequences.quoteAndEscape(data) :
+            stringBuilderSplit(
+                CharSequences.escape(data)
+                    .toString(),
+                max
+            );
     }
 
     private static CharSequence stringBuilderSplit(final String data, final int max) {
@@ -278,8 +278,8 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
         do {
             if (left.length() < max) {
                 statements.append(".append(")
-                        .append(CharSequences.quote(left))
-                        .append(')');
+                    .append(CharSequences.quote(left))
+                    .append(')');
                 break;
             }
 
@@ -302,8 +302,8 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
             }
 
             statements.append(".append(")
-                    .append(CharSequences.quote(left.substring(0, end)))
-                    .append(')');
+                .append(CharSequences.quote(left.substring(0, end)))
+                .append(')');
             left = left.substring(end);
         } while (false == left.isEmpty());
 
@@ -315,9 +315,9 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
                                   final String placeholder,
                                   final CharSequence value) {
         return replace(
-                template,
-                placeholder,
-                value.toString()
+            template,
+            placeholder,
+            value.toString()
         );
     }
 
@@ -327,10 +327,10 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
         final String after = template.replace(placeholder, value);
         if (template.equals(after)) {
             throw new IllegalStateException(
-                    "Unable to find " +
-                            CharSequences.quoteAndEscape(placeholder) +
-                            " in " +
-                            CharSequences.quoteAndEscape(template)
+                "Unable to find " +
+                    CharSequences.quoteAndEscape(placeholder) +
+                    " in " +
+                    CharSequences.quoteAndEscape(template)
             );
         }
         return after;
@@ -362,13 +362,13 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
      */
     private void printSummary(final String message) {
         this.messager.printMessage(
-                Kind.NOTE, // maven will show this as INFO
-                this.getClass()
-                        .getSimpleName() +
-                        " generated " +
-                        this.generatedClassName() +
-                        ".java, " +
-                        message
+            Kind.NOTE, // maven will show this as INFO
+            this.getClass()
+                .getSimpleName() +
+                " generated " +
+                this.generatedClassName() +
+                ".java, " +
+                message
         );
     }
 
@@ -438,14 +438,14 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
     static Logging reportLoggingAnnotationProcessorArgumentFail(final String message,
                                                                 final String logging) {
         throw new IllegalStateException(message +
-                " " +
-                CharSequences.quote(LOGGING_ANNOTATION_PROCESSOR_OPTION) +
-                (null == logging ? "" : "=" + CharSequences.quoteIfChars(logging)) +
-                ", expected one of " +
-                Arrays.stream(Logging.values())
-                        .map(Logging::name)
-                        .collect(Collectors.joining(", ")) +
-                " (https://github.com/mP1/j2cl-locale#logging-javac-annotation-processor-argument)"
+            " " +
+            CharSequences.quote(LOGGING_ANNOTATION_PROCESSOR_OPTION) +
+            (null == logging ? "" : "=" + CharSequences.quoteIfChars(logging)) +
+            ", expected one of " +
+            Arrays.stream(Logging.values())
+                .map(Logging::name)
+                .collect(Collectors.joining(", ")) +
+            " (https://github.com/mP1/j2cl-locale#logging-javac-annotation-processor-argument)"
         );
     }
 
@@ -520,24 +520,24 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
 
         if (!simpleClassName.endsWith(annotationProcessor)) {
             throw new IllegalStateException(
-                    "Annotation processor name must end with " +
-                            CharSequences.quoteAndEscape(annotationProcessor) +
-                            " but was " +
-                            CharSequences.quoteAndEscape(className.toString())
+                "Annotation processor name must end with " +
+                    CharSequences.quoteAndEscape(annotationProcessor) +
+                    " but was " +
+                    CharSequences.quoteAndEscape(className.toString())
             );
         }
 
         return ClassName.with(
-                className.parentPackage()
-                        .parent()
-                        .append(PackageName.with("generated"))
-                        .value() +
-                        '.' +
-                        CharSequences.subSequence(
-                                simpleClassName,
-                                0,
-                                -annotationProcessor.length()
-                        )
+            className.parentPackage()
+                .parent()
+                .append(PackageName.with("generated"))
+                .value() +
+                '.' +
+                CharSequences.subSequence(
+                    simpleClassName,
+                    0,
+                    -annotationProcessor.length()
+                )
         );
     }
 
@@ -562,8 +562,8 @@ public abstract class LocaleAwareAnnotationProcessor extends AbstractProcessor {
      */
     private void error(final String message) {
         this.messager.printMessage(
-                Diagnostic.Kind.ERROR,
-                message
+            Diagnostic.Kind.ERROR,
+            message
         );
     }
 

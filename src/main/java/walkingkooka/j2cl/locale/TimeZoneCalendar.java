@@ -32,7 +32,7 @@ public final class TimeZoneCalendar implements Comparable<TimeZoneCalendar> {
     @GwtIncompatible
     public static TimeZoneCalendar with(final Calendar calendar) {
         return with(calendar.getFirstDayOfWeek(),
-                calendar.getMinimalDaysInFirstWeek());
+            calendar.getMinimalDaysInFirstWeek());
     }
 
     public static TimeZoneCalendar read(final DataInput data) throws IOException {
@@ -98,10 +98,10 @@ public final class TimeZoneCalendar implements Comparable<TimeZoneCalendar> {
     @Override
     public String toString() {
         return ToStringBuilder.empty()
-                .label("firstDayOfWeek")
-                .value(this.firstDayOfWeek)
-                .label("minimalDaysInFirstWeek")
-                .value(this.minimalDaysInFirstWeek)
-                .build();
+            .label("firstDayOfWeek")
+            .value(this.firstDayOfWeek)
+            .label("minimalDaysInFirstWeek")
+            .value(this.minimalDaysInFirstWeek)
+            .build();
     }
 }

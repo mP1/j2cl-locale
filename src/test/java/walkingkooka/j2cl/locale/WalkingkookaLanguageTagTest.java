@@ -47,9 +47,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public final class WalkingkookaLanguageTagTest implements ClassTesting<WalkingkookaLanguageTag>,
-        HashCodeEqualsDefinedTesting2<WalkingkookaLanguageTag>,
-        PredicateTesting,
-        ToStringTesting<WalkingkookaLanguageTag> {
+    HashCodeEqualsDefinedTesting2<WalkingkookaLanguageTag>,
+    PredicateTesting,
+    ToStringTesting<WalkingkookaLanguageTag> {
 
     // filter...........................................................................................................
 
@@ -155,7 +155,7 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
         out.writeUTF("");
 
         this.decodeAndCheck(text,
-                ROOT);
+            ROOT);
     }
 
     @Test
@@ -166,7 +166,7 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
         out.writeUTF("EN");
 
         this.decodeAndCheck(text,
-                WalkingkookaLanguageTag.with("EN", "EN", "", ""));
+            WalkingkookaLanguageTag.with("EN", "EN", "", ""));
     }
 
     @Test
@@ -177,7 +177,7 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
         out.writeUTF("af-NA,af,NA");
 
         this.decodeAndCheck(text,
-                WalkingkookaLanguageTag.with("af-NA", "af", "NA", ""));
+            WalkingkookaLanguageTag.with("af-NA", "af", "NA", ""));
     }
 
     @Test
@@ -188,7 +188,7 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
         out.writeUTF("af-NA,af,NA");
 
         this.decodeAndCheck(text,
-                WalkingkookaLanguageTag.with("af-NA", "af", "NA", ""));
+            WalkingkookaLanguageTag.with("af-NA", "af", "NA", ""));
     }
 
     @Test
@@ -199,7 +199,7 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
         out.writeUTF("tag,lang,country");
 
         this.decodeAndCheck(text,
-                WalkingkookaLanguageTag.with("tag", "lang", "country", ""));
+            WalkingkookaLanguageTag.with("tag", "lang", "country", ""));
     }
 
     @Test
@@ -210,7 +210,7 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
         out.writeUTF("az-Cyrl-AZ,az,AZ,,Cyrl");
 
         this.decodeAndCheck(text,
-                WalkingkookaLanguageTag.with("az-Cyrl-AZ", "az", "AZ", "", "Cyrl"));
+            WalkingkookaLanguageTag.with("az-Cyrl-AZ", "az", "AZ", "", "Cyrl"));
     }
 
     @Test
@@ -223,9 +223,9 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
         out.writeUTF("az-Cyrl-AZ,az,AZ,,Cyrl");
 
         this.decodeAndCheck(text,
-                ROOT,
-                WalkingkookaLanguageTag.with("EN", "EN", "", ""),
-                WalkingkookaLanguageTag.with("az-Cyrl-AZ", "az", "AZ", "", "Cyrl"));
+            ROOT,
+            WalkingkookaLanguageTag.with("EN", "EN", "", ""),
+            WalkingkookaLanguageTag.with("az-Cyrl-AZ", "az", "AZ", "", "Cyrl"));
     }
 
     @Test
@@ -238,9 +238,9 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
         out.writeUTF("DE");
 
         this.decodeAndCheck(text,
-                WalkingkookaLanguageTag.with("EN", "EN", "", ""),
-                WalkingkookaLanguageTag.with("CA-FR", "ca", "FR", ""),
-                WalkingkookaLanguageTag.with("DE", "DE", "", ""));
+            WalkingkookaLanguageTag.with("EN", "EN", "", ""),
+            WalkingkookaLanguageTag.with("CA-FR", "ca", "FR", ""),
+            WalkingkookaLanguageTag.with("DE", "DE", "", ""));
     }
 
     @Test
@@ -252,8 +252,8 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
         out.writeUTF("az-Cyrl-AZ,az,AZ,,Cyrl");
 
         this.decodeAndCheck(text,
-                WalkingkookaLanguageTag.with("EN", "EN", "", ""),
-                WalkingkookaLanguageTag.with("az-Cyrl-AZ", "az", "AZ", "", "Cyrl"));
+            WalkingkookaLanguageTag.with("EN", "EN", "", ""),
+            WalkingkookaLanguageTag.with("az-Cyrl-AZ", "az", "AZ", "", "Cyrl"));
     }
 
     private void decodeAndCheck(final CharSequence encoded,
@@ -265,14 +265,14 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
                                  final List<WalkingkookaLanguageTag> expected) throws IOException {
 
         assertEquals(toString(expected),
-                toString(WalkingkookaLanguageTag.decode(StringDataInputDataOutput.input(encoded.toString()))),
-                "decode " + encoded);
+            toString(WalkingkookaLanguageTag.decode(StringDataInputDataOutput.input(encoded.toString()))),
+            "decode " + encoded);
     }
 
     private static String toString(final List<WalkingkookaLanguageTag> tags) {
         return tags.stream()
-                .map(WalkingkookaLanguageTag::toString)
-                .collect(Collectors.joining("\n"));
+            .map(WalkingkookaLanguageTag::toString)
+            .collect(Collectors.joining("\n"));
     }
 
     // all..............................................................................................................
@@ -320,19 +320,19 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
     @Test
     public void testAllEnWildcard() {
         this.allAndCheck("EN*",
-                WalkingkookaLanguageTag.all()
-                        .stream()
-                        .filter(t -> CaseSensitivity.INSENSITIVE.equals(t, "EN") || CaseSensitivity.INSENSITIVE.startsWith(t, "EN"))
-                        .collect(Collectors.toCollection(() -> SortedSets.tree(String.CASE_INSENSITIVE_ORDER))));
+            WalkingkookaLanguageTag.all()
+                .stream()
+                .filter(t -> CaseSensitivity.INSENSITIVE.equals(t, "EN") || CaseSensitivity.INSENSITIVE.startsWith(t, "EN"))
+                .collect(Collectors.toCollection(() -> SortedSets.tree(String.CASE_INSENSITIVE_ORDER))));
     }
 
     @Test
     public void testAllEnWildcardFr() {
         this.allAndCheck("EN*,FR",
-                WalkingkookaLanguageTag.all()
-                        .stream()
-                        .filter(t -> CaseSensitivity.INSENSITIVE.startsWith(t, "EN") || t.equalsIgnoreCase("FR"))
-                        .collect(Collectors.toCollection(() -> SortedSets.tree(String.CASE_INSENSITIVE_ORDER))));
+            WalkingkookaLanguageTag.all()
+                .stream()
+                .filter(t -> CaseSensitivity.INSENSITIVE.startsWith(t, "EN") || t.equalsIgnoreCase("FR"))
+                .collect(Collectors.toCollection(() -> SortedSets.tree(String.CASE_INSENSITIVE_ORDER))));
     }
 
     private void allAndCheck(final String filter,
@@ -349,24 +349,24 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
     public void testAllWithoutAlternatives() {
         // filter out the "duplicate" locales with two forms before comparing.
         assertEquals(Arrays.stream(Locale.getAvailableLocales())
-                        .sorted(new Comparator<Locale>() {
-                            public int compare(final Locale l, final Locale r) {
-                                return l.toLanguageTag().compareTo(r.toLanguageTag());
-                            }
-                        })
-                        .map(Locale::toLanguageTag)
-                        .filter(t -> false == WalkingkookaLanguageTag.isUnsupported(t))
-                        .sorted()
-                        .distinct()
-                        .collect(Collectors.joining("\n")),
-                WalkingkookaLanguageTag.all()
-                        .stream()
-                        .filter(t -> {
-                            final int index = t.indexOf("-");
-                            final String language = -1 != index ? t.substring(0, index) : t;
-                            return WalkingkookaLanguageTag.oldToNewLanguage(language).equals(language);
-                        })
-                        .collect(Collectors.joining("\n")));
+                .sorted(new Comparator<Locale>() {
+                    public int compare(final Locale l, final Locale r) {
+                        return l.toLanguageTag().compareTo(r.toLanguageTag());
+                    }
+                })
+                .map(Locale::toLanguageTag)
+                .filter(t -> false == WalkingkookaLanguageTag.isUnsupported(t))
+                .sorted()
+                .distinct()
+                .collect(Collectors.joining("\n")),
+            WalkingkookaLanguageTag.all()
+                .stream()
+                .filter(t -> {
+                    final int index = t.indexOf("-");
+                    final String language = -1 != index ? t.substring(0, index) : t;
+                    return WalkingkookaLanguageTag.oldToNewLanguage(language).equals(language);
+                })
+                .collect(Collectors.joining("\n")));
     }
 
     @Test
@@ -391,10 +391,10 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
     public void testLocalesFiltered() {
         final String filter = "EN*";
         assertEquals(WalkingkookaLanguageTag.all(filter),
-                WalkingkookaLanguageTag.locales(filter)
-                        .stream()
-                        .map(Locale::toLanguageTag)
-                        .collect(Collectors.toCollection(Sets::ordered)));
+            WalkingkookaLanguageTag.locales(filter)
+                .stream()
+                .map(Locale::toLanguageTag)
+                .collect(Collectors.toCollection(Sets::ordered)));
     }
 
     // parse............................................................................................................
@@ -581,8 +581,8 @@ public final class WalkingkookaLanguageTagTest implements ClassTesting<Walkingko
                                 final String tag,
                                 final Integer expected) {
         assertEquals(Optional.ofNullable(expected),
-                WalkingkookaLanguageTag.parse(tag).tryLookup(source::get),
-                () -> "tryLookup " + tag + " with " + source);
+            WalkingkookaLanguageTag.parse(tag).tryLookup(source::get),
+            () -> "tryLookup " + tag + " with " + source);
     }
 
     // Object...........................................................................................................

@@ -46,25 +46,25 @@ public final class LocaleAwareAnnotationProcessorTest implements ClassTesting<Lo
     @Test
     public void testVerifyRequiredOptions() {
         final IllegalArgumentException thrown = assertThrows(
-                IllegalArgumentException.class,
-                () -> LocaleAwareAnnotationProcessor.verifyRequiredOptions(
-                        Maps.of(
-                                "a1", "value1",
-                                "b2", "value2",
-                                "empty3", ""
-                        ),
-                        Sets.of(
-                                "a1",
-                                "b2",
-                                "empty3",
-                                "missing4"
-                        )
+            IllegalArgumentException.class,
+            () -> LocaleAwareAnnotationProcessor.verifyRequiredOptions(
+                Maps.of(
+                    "a1", "value1",
+                    "b2", "value2",
+                    "empty3", ""
+                ),
+                Sets.of(
+                    "a1",
+                    "b2",
+                    "empty3",
+                    "missing4"
                 )
+            )
         );
 
         this.checkEquals(
-                "Missing one or more required annotation processor options: \"empty3\", \"missing4\"",
-                thrown.getMessage()
+            "Missing one or more required annotation processor options: \"empty3\", \"missing4\"",
+            thrown.getMessage()
         );
     }
 
@@ -73,8 +73,8 @@ public final class LocaleAwareAnnotationProcessorTest implements ClassTesting<Lo
     @Test
     public void testGeneratedClassName() {
         this.checkEquals(
-                ClassName.with("walkingkooka.j2cl.locale.generated.TestLocaleAware"),
-                new TestLocaleAwareAnnotationProcessor().generatedClassName()
+            ClassName.with("walkingkooka.j2cl.locale.generated.TestLocaleAware"),
+            new TestLocaleAwareAnnotationProcessor().generatedClassName()
         );
     }
 
@@ -83,22 +83,22 @@ public final class LocaleAwareAnnotationProcessorTest implements ClassTesting<Lo
     @Test
     public void testReportLoggingAnnotationProcessorArgumentFailMissingAnnotationProcessor() {
         this.reportAndFail("ABC",
-                null,
-                "ABC \"walkingkooka.j2cl.locale.Logging\", expected one of NONE, SLASH_SLASH_COMMENTS, TXT_FILE (https://github.com/mP1/j2cl-locale#logging-javac-annotation-processor-argument)");
+            null,
+            "ABC \"walkingkooka.j2cl.locale.Logging\", expected one of NONE, SLASH_SLASH_COMMENTS, TXT_FILE (https://github.com/mP1/j2cl-locale#logging-javac-annotation-processor-argument)");
     }
 
     @Test
     public void testReportLoggingAnnotationProcessorArgumentFail() {
         this.reportAndFail("ABC",
-                "XYZ",
-                "ABC \"walkingkooka.j2cl.locale.Logging\"=\"XYZ\", expected one of NONE, SLASH_SLASH_COMMENTS, TXT_FILE (https://github.com/mP1/j2cl-locale#logging-javac-annotation-processor-argument)");
+            "XYZ",
+            "ABC \"walkingkooka.j2cl.locale.Logging\"=\"XYZ\", expected one of NONE, SLASH_SLASH_COMMENTS, TXT_FILE (https://github.com/mP1/j2cl-locale#logging-javac-annotation-processor-argument)");
     }
 
     private void reportAndFail(final String message,
                                final String logging,
                                final String expected) {
         final IllegalStateException thrown = assertThrows(IllegalStateException.class,
-                () -> LocaleAwareAnnotationProcessor.reportLoggingAnnotationProcessorArgumentFail(message, logging));
+            () -> LocaleAwareAnnotationProcessor.reportLoggingAnnotationProcessorArgumentFail(message, logging));
         assertEquals(expected, thrown.getMessage(), "message");
     }
 
@@ -107,54 +107,54 @@ public final class LocaleAwareAnnotationProcessorTest implements ClassTesting<Lo
     @Test
     public void testStringDeclarationShort() {
         this.stringDeclarationAndCheck("",
-                1,
-                CharSequences.quoteAndEscape("").toString());
+            1,
+            CharSequences.quoteAndEscape("").toString());
     }
 
     @Test
     public void testStringDeclarationShort2() {
         this.stringDeclarationAndCheck("a",
-                2,
-                CharSequences.quoteAndEscape("a").toString());
+            2,
+            CharSequences.quoteAndEscape("a").toString());
     }
 
     @Test
     public void testStringDeclarationSplit() {
         this.stringDeclarationAndCheck("abcdefghijklmnopq",
-                13,
-                "new java.lang.StringBuilder().append(\"abcdefghijkl\").append(\"mnopq\").toString()"
+            13,
+            "new java.lang.StringBuilder().append(\"abcdefghijkl\").append(\"mnopq\").toString()"
         );
     }
 
     @Test
     public void testStringDeclarationSplitBackslash() {
         this.stringDeclarationAndCheck("abcdefghijk\\lmnopq",
-                13,
-                "new java.lang.StringBuilder().append(\"abcdefghijk\\\").append(\"\\lmnopq\").toString()"
+            13,
+            "new java.lang.StringBuilder().append(\"abcdefghijk\\\").append(\"\\lmnopq\").toString()"
         );
     }
 
     @Test
     public void testStringDeclarationSplitBackslash2() {
         this.stringDeclarationAndCheck("abcdefghij\\klmnopq",
-                13,
-                "new java.lang.StringBuilder().append(\"abcdefghij\\\\\").append(\"klmnopq\").toString()"
+            13,
+            "new java.lang.StringBuilder().append(\"abcdefghij\\\\\").append(\"klmnopq\").toString()"
         );
     }
 
     @Test
     public void testStringDeclarationSplitBackslash3() {
         this.stringDeclarationAndCheck("a\\bcdefghijklmnopq",
-                13,
-                "new java.lang.StringBuilder().append(\"a\\\\bcdefghij\").append(\"klmnopq\").toString()"
+            13,
+            "new java.lang.StringBuilder().append(\"a\\\\bcdefghij\").append(\"klmnopq\").toString()"
         );
     }
 
     @Test
     public void testStringDeclarationSplitBackslash4() {
         this.stringDeclarationAndCheck("abcdefghijklmnopq\\",
-                13,
-                "new java.lang.StringBuilder().append(\"abcdefghijkl\").append(\"mnopq\\\\\").toString()"
+            13,
+            "new java.lang.StringBuilder().append(\"abcdefghijkl\").append(\"mnopq\\\\\").toString()"
         );
     }
 
@@ -163,8 +163,8 @@ public final class LocaleAwareAnnotationProcessorTest implements ClassTesting<Lo
         System.out.println(string);
 
         assertEquals(CharSequences.escape(expected).toString(),
-                CharSequences.escape(string).toString(),
-                ()-> CharSequences.quoteAndEscape(text) + " max=" + max);
+            CharSequences.escape(string).toString(),
+            () -> CharSequences.quoteAndEscape(text) + " max=" + max);
     }
 
     // ClassTesting.....................................................................................................

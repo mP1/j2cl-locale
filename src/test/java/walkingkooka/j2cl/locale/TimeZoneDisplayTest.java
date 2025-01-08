@@ -31,9 +31,9 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public final class TimeZoneDisplayTest implements ClassTesting2<TimeZoneDisplay>,
-        ComparableTesting,
-        HashCodeEqualsDefinedTesting2<TimeZoneDisplay>,
-        ToStringTesting<TimeZoneDisplay> {
+    ComparableTesting,
+    HashCodeEqualsDefinedTesting2<TimeZoneDisplay>,
+    ToStringTesting<TimeZoneDisplay> {
 
     private final static String SHORT = "short-1";
     private final static String SHORT_DAY = "short-day-2";
@@ -66,7 +66,7 @@ public final class TimeZoneDisplayTest implements ClassTesting2<TimeZoneDisplay>
     @Test
     public void testCompareLess() {
         this.compareToAndCheckLess(this.createObject(),
-                TimeZoneDisplay.with("zzzz", SHORT_DAY, LONG, LONG_DAY));
+            TimeZoneDisplay.with("zzzz", SHORT_DAY, LONG, LONG_DAY));
     }
 
     // HashCodeEqualsDefinedTesting2....................................................................................
@@ -94,7 +94,7 @@ public final class TimeZoneDisplayTest implements ClassTesting2<TimeZoneDisplay>
     @Test
     public void testToString() {
         this.toStringAndCheck(this.createObject(),
-                "\"short-1\" \"short-day-2\" \"long-3\" \"long-day-4\"");
+            "\"short-1\" \"short-day-2\" \"long-3\" \"long-day-4\"");
     }
 
     // ClassTesting....................................................................................................

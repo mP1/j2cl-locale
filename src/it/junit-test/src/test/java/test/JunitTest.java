@@ -46,7 +46,7 @@ public class JunitTest {
         final StringBuilder data = new StringBuilder();
         final DataOutput dataOutput = StringDataInputDataOutput.output(data::append);
 
-        final TimeZoneCalendar calendar = TimeZoneCalendar.with(1 , 2);
+        final TimeZoneCalendar calendar = TimeZoneCalendar.with(1, 2);
         calendar.write(dataOutput);
 
         final DataInput dataInput = StringDataInputDataOutput.input(data.toString());
