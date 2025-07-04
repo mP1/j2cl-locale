@@ -82,8 +82,8 @@ Some examples values include.
     <artifactId>maven-compiler-plugin</artifactId>
     <version>3.8.0</version>
     <configuration>
-        <source>9</source>
-        <target>9</target>
+        <source>11</source>
+        <target>11</target>
         <compilerArgs>
             <arg>-Awalkingkooka.j2cl.java.util.Locale=EN-*</arg>
             <arg>-Awalkingkooka.j2cl.locale.Logging=TXT_FILE</arg>
