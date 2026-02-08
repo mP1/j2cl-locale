@@ -5,8 +5,6 @@
 ![](https://tokei.rs/b1/github/mP1/j2cl-locale)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/mP1/j2cl-locale.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/mP1/j2cl-locale/alerts/)
 
-
-
 j2c-locale
 =================
 
@@ -16,8 +14,6 @@ such as the emulation of `java.text` and others.
 
 The classes included in this project should be considered internal, and this project should only be referenced as a dependency
 by [j2cl-java-util-Locale](https://travis-ci.com/mP1/j2cl-java-util-Locale).
-
-
 
 # Threeten backport
 
@@ -33,8 +29,6 @@ Changes include:
 - Note the fork of threeten does not include the accompanying tests, which of course lowers the code coverage of this project significantly.
 
 Click [here](https://github.com/ThreeTen/threetenbp/blob/master/LICENSE.txt) for the official threeten license. 
-
-
 
 # Maven usage
 
@@ -57,8 +51,6 @@ The last two options will contain readable text of the value of the generated pr
 ```
 
 ![Sample TXT_FILE](walkingkooka.j2cl.logging.Logging.png)
-
-
 
 ## Locale selection (javac annotation processor argument)
 
@@ -107,8 +99,6 @@ as something such as `java.time` actually uses internally data for many classes:
 - `java.text.Currency`
 - `java.util.TimeZone`
 
-
-
 # Related annotation processors
 
 The following list, contains emulated `java.util.Locale` aware classes and their corresponding annotation processor.
@@ -122,15 +112,11 @@ support classes within this project.
 - [Locale](https://github.com/mP1/j2cl-java-util-Locale) supporting [annotation processor](https://github.com/mP1/j2cl-java-util-locale-annotation-processsor)
 - [TimeZone](https://github.com/mP1/j2cl-java-util-TimeZone) supporting [annotation processor](https://github.com/mP1/j2cl-java-util-TimeZone-annotation-processsor)
 
-
-
 # Authoring annotation processors.
 
 An abstract [AnnotationProcessor](https://github.com/mP1/j2cl-locale/blob/master/src/main/java/walkingkooka/j2cl/locale/annotationprocessor/LocaleAwareAnnotationProcessor.java)
 is available with a few template methods which present the selected locales. It also handles some other housekeeping,
 relating to the annotation processor lifecycle.
-
- 
 
 # Usage
 
@@ -145,8 +131,6 @@ and build and install with Maven.
 ```bash
 mvn clean install
 ```
-
-
 
 # Contributions
 
