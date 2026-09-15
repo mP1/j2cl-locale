@@ -160,7 +160,6 @@ public final class LocaleAwareAnnotationProcessorTest implements ClassTesting<Lo
 
     private void stringDeclarationAndCheck(final String text, final int max, final String expected) {
         final String string = LocaleAwareAnnotationProcessor.stringDeclaration(text, max).toString();
-        System.out.println(string);
 
         assertEquals(CharSequences.escape(expected).toString(),
             CharSequences.escape(string).toString(),
