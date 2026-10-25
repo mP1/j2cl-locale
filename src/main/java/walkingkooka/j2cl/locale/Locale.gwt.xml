@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module>
   <inherits name="walkingkooka.j2cl.java.io.IO"/>
+  <inherits name="walkingkooka.j2cl.java.nio.NIO"/>
   <inherits name="walkingkooka.text.printer.Printer"/>
 
   <source path=""/>
